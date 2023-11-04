@@ -92,19 +92,22 @@
                     <div class="swiper-button-prev"></div>
                     <div class="swiper-button-next"></div>
                 </div>
+                  <%--srolling javascript--%>
+                  <script type="text/javascript">
+                    function initSwiper() {
+                        var mySwiper = new Swiper('.sample-slider', {
+                            loop: false,                         //loop
+                                pagination: {                       //pagination(dots)
+                                    el: '.swiper-pagination',
+                                },
+                                navigation: {                       //navigation(arrows)
+                                    nextEl: ".swiper-button-next",
+                                    prevEl: ".swiper-button-prev",
+                                },
+                        });
+                    }
+                  </script>
 
-        <script>
-            const swiper = new Swiper('.sample-slider', {
-                loop: false,                         //loop
-                pagination: {                       //pagination(dots)
-                    el: '.swiper-pagination',
-                },
-                navigation: {                       //navigation(arrows)
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev",
-                },
-            })
-        </script>
                 <ul class="nav nav-pills nav-pills-light nav-fill nav-stack small border-top my-top">
                   <li class="nav-item">
                     <a class="nav-link mb-0" href="#!"> <i class="bi bi-heart pe-1"></i>Like</a>

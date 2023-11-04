@@ -28,6 +28,7 @@ namespace WebApplication
                 //{
                 //    GetOneDataRadomly();
                 //}
+                ScriptManager.RegisterStartupScript(Page, Page.GetType(), "swiperInit", "initSwiper();", true);
             }
         }
         private int random()
