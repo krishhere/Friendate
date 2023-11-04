@@ -21,6 +21,10 @@ namespace WebApplication
                     string mail = HttpContext.Current.Request.Cookies["salngEmail"].Value;
                     BindUser(mail);
                 }
+                else
+                {
+                    Response.Redirect("Login.aspx");
+                }
             }
         }
         protected int BindUser(string emailId)
@@ -50,6 +54,18 @@ namespace WebApplication
                 con.Close();
             }
             return id;
+        }
+        protected void lbrnSignOut_Click(object sender, EventArgs e)
+        {
+            RemoveValueInCookies("salngEmail");
+            RemoveValueInCookies("salngName");
+            Response.Redirect("Login.aspx");
+        }
+        private void RemoveValueInCookies(string key)
+        {
+            HttpCookie cookie = new HttpCookie(key);
+            cookie.Expires = DateTime.Now.AddYears(-1);
+            HttpContext.Current.Response.Cookies.Add(cookie);
         }
     }
 }

@@ -12,6 +12,7 @@ using System.Web.UI;
 using ImageMagick;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 
 namespace WebApplication
 {
@@ -100,13 +101,6 @@ namespace WebApplication
             cookie.Expires = DateTime.Now.AddYears(1);
             HttpContext.Current.Response.Cookies.Add(cookie);
         }
-        private bool RemoveValueInCookies(string key)
-        {
-            HttpCookie cookie = new HttpCookie(key);
-            cookie.Expires = DateTime.Now.AddYears(-1);
-            HttpContext.Current.Response.Cookies.Add(cookie);
-            return true;
-        }
         protected void BtnSubmit_Click(object sender, EventArgs e)
         {
             try
@@ -136,18 +130,18 @@ namespace WebApplication
                         Response.Redirect("Default.aspx");
                     }
                     id = BindUserId(email);
+                    Thread.Sleep(1000);
                     UploadInterests(id);
                     txtCity.Text = "";
                     txtDob.Text = "";
                     txtAbout.Text = "";
-                    Response.Redirect("");
+                    Response.Redirect("Default.aspx");
                 }
                 else
                 {
                     string Error = "Supports jpeg images";
                     lblMsg.Visible = true;
                     lblMsg.Text = Error;
-                    //ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "alert('Supports jpeg images & size should be less than 16 MB.');", true);
                 }
             }
             catch (Exception ex)
