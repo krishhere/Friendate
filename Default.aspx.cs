@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Data;
 using System.Web.UI;
 using System.Collections.Generic;
+using System.Web.UI.HtmlControls;
 
 namespace WebApplication
 {
@@ -77,24 +78,40 @@ namespace WebApplication
                 string value = "Looking for ";
                 if (!Convert.IsDBNull(dr["lookFor"]))
                 {
+                    HtmlGenericControl liLnkFriendItem = (HtmlGenericControl)e.Item.FindControl("liLnkFriend");
+                    HtmlGenericControl liLnkDateItem = (HtmlGenericControl)e.Item.FindControl("liLnkDate");
                     int i = Convert.ToInt32(dr["lookFor"].ToString());
+                    LinkButton lbFriend = e.Item.FindControl("lnkFriend") as LinkButton;
+                    LinkButton lbDate = e.Item.FindControl("lnkDate") as LinkButton;
                     if (i == 0)
                     {
                         value = value + "friend";
+                        //liLnkFriendItem.Style.Add("display", "contents");
+                        //liLnkDateItem.Style.Add("display", "none");
+                        lbFriend.Visible = true;
+                        lbDate.Visible = false;
                     }
                     else if (i==1)
                     {
                         value = value + "date";
+                        lbDate.Visible = true;
+                        lbFriend.Visible = false;
+                        //liLnkDateItem.Style.Add("display", "contents");
+                        //liLnkFriendItem.Style.Add("display", "none");
                     }
                     else
                     {
                         value = value + "friend or date";
+                        //liLnkFriendItem.Style.Add("display", "contents");
+                        //liLnkDateItem.Style.Add("display", "contents");
+                        lbFriend.Visible = true;
+                        lbDate.Visible = true;
                     }
                     LookFor.Text = value;
                 }
                 else
                 {
-                    LookFor.Text = value + "Fun";
+                    LookFor.Text = value + "fun";
                 }
 
                 Repeater rptInterest = e.Item.FindControl("rptUserInterests") as Repeater;

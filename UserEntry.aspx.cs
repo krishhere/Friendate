@@ -40,6 +40,11 @@ namespace WebApplication
                 }
                 if (HttpContext.Current.Request.Cookies[cookieName] != null && HttpContext.Current.Request.Cookies[cookieEmail] != null)
                 {
+                    int id = BindUserId(HttpContext.Current.Request.Cookies[cookieEmail].Value);
+                    if (id!=0)
+                    {
+                        Response.Redirect("Default.aspx");
+                    }
                     name = HttpContext.Current.Request.Cookies[cookieName].Value;
                     txtName.Text = name;
                     if (city == null)
@@ -120,16 +125,8 @@ namespace WebApplication
                 if (txtDob.Text.Trim() != "" && txtAbout.Text.Trim() != ""&& imgType.Contains("jpeg"))
                 {
                     string email = HttpContext.Current.Request.Cookies[cookieEmail].Value;
+                    UserInsert(email);
                     int id = BindUserId(email);
-                    if (id == 0)
-                    {
-                        UserInsert(email);
-                    }
-                    else
-                    {
-                        Response.Redirect("Default.aspx");
-                    }
-                    id = BindUserId(email);
                     Thread.Sleep(1000);
                     UploadInterests(id);
                     txtCity.Text = "";

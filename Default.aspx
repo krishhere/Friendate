@@ -59,7 +59,7 @@
                     <a href="#" class="text-secondary btn btn-secondary-soft-hover py-1 px-2" id="cardFeedAction" data-bs-toggle="dropdown" aria-expanded="false">
                       <i class="bi bi-three-dots"></i>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardFeedAction">
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardFeedAction" style="padding:0px;">
                       <li><a class="dropdown-item" href="#"> <i class="bi bi-flag fa-fw pe-2"></i>Report</a></li>
                     </ul>
                   </div>
@@ -89,7 +89,6 @@
                             </ul>
 		                </div>
                     </div>
-                    <div class="swiper-pagination"></div>
                     <div class="swiper-button-prev"></div>
                     <div class="swiper-button-next"></div>
                 </div>
@@ -109,12 +108,25 @@
                     }
                   </script>
 
-                <ul class="nav nav-pills nav-pills-light nav-fill nav-stack small border-top my-top">
-                  <li class="nav-item">
-                    <a class="nav-link mb-0" href="#!"> <i class="bi bi-heart pe-1"></i>Like</a>
+                  <div class="nav nav-pills nav-pills-light nav-fill nav-stack small border-top my-top">
+                    <asp:LinkButton ID="lnkFriend" runat="server" Text="<i class='bi bi-heart pe-1'></i> Friend" class="nav-link mb-0" style="float:left;" />
+                    <asp:LinkButton ID="lnkDate" runat="server" Text="<i class='bi bi-heart pe-1'></i> Date" class="nav-link mb-0" style="float:left;" />
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link mb-0" id="cardShareAction" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-reply-fill flip-horizontal ps-1"></i>Share
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-envelope fa-fw pe-2"></i>Facebook</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-bookmark-check fa-fw pe-2"></i>whatsapp</a></li>
+                        </ul>
+                    </li>
+                  </div>
+                <%--<ul class="nav nav-pills nav-pills-light nav-fill nav-stack small border-top my-top">
+                  <li class="nav-item" ID="liLnkFriend" runat = "server">
+                      <asp:LinkButton ID="lnkFriend1" runat="server" Text="<i class='bi bi-heart pe-1'></i> Friend" class="nav-link mb-0" />
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link mb-0" href="#!"> <i class="bi bi-chat-fill pe-1"></i>Match</a>
+                  <li class="nav-item" ID="liLnkDate" runat = "server">
+                      <asp:LinkButton ID="lnkDate1" runat="server" Text="<i class='bi bi-heart pe-1'></i> Date" class="nav-link mb-0" />
                   </li>
                   <li class="nav-item dropdown">
                     <a href="#" class="nav-link mb-0" id="cardShareAction" data-bs-toggle="dropdown" aria-expanded="false">
@@ -125,7 +137,7 @@
                       <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark-check fa-fw pe-2"></i>whatsapp </a></li>
                     </ul>
                   </li>
-                </ul>
+                </ul>--%>
               </div>
             </div>
         </ItemTemplate>
