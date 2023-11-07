@@ -16,7 +16,7 @@ namespace WebApplication
         {
             if (!IsPostBack)
             {
-                if (HttpContext.Current.Request.Cookies[cookieName] != null && HttpContext.Current.Request.Cookies[cookieEmail] != null)
+                if (HttpContext.Current.Request.Cookies[cookieEmail] != null)
                 {
                     string mail = HttpContext.Current.Request.Cookies["salngEmail"].Value;
                     BindUser(mail);

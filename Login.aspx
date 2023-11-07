@@ -45,7 +45,7 @@
             <div class="d-grid">
                 <asp:Button ID="btnSignInGoogle" runat="server" Text="Sign in with Google" class="btn btn-lg btn-primary" OnClick="btnSignInGoogle_Click" /> </div>
               <br />
-          <p class="mb-0">Don't have an account?<a href="Signup.aspx"> Click here to sign up</a></p>
+          <p class="mb-0">Don't have an account?<a href="Signup.aspx">Click here to sign up</a></p>
             <p class="mb-0 mt-3">©<%: DateTime.Now.Year %> <a target="_blank" href="#">MySite</a> All rights reserved</p>
           </form>
         </div>

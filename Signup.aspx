@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Signup.aspx.cs" Inherits="WebApplication.Signup" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Signup.aspx.cs" Inherits="WebApplication.Signup" Async="true" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
@@ -24,38 +24,41 @@
           <div class="text-center">
             <h1 class="mb-2">Sign up</h1>
           </div>
-          <form class="mt-4">
-            <div class="mb-3 input-group-lg">
-              <input type="email" class="form-control" placeholder="Enter email">
-              <%--<small>We'll never share your email with anyone else.</small>--%>
-            </div>
-            <div class="mb-3 position-relative">
-              <div class="input-group input-group-lg">
-                <input class="form-control fakepassword" type="password" id="psw-input" placeholder="Enter new password">
-                <span class="input-group-text p-0">
-                  <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px"></i>
-                </span>
-              </div>
-              <div id="pswmeter" class="mt-2"></div>
-              <div class="d-flex mt-1">
-                <div id="pswmeter-message" class="rounded"></div>
-                <div class="ms-auto">
-                  <i class="bi bi-info-circle ps-1" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Include at least one uppercase, one lowercase, one special character, one number and 8 characters long." data-bs-original-title="" title=""></i>
+          <div class="mt-4">
+              <asp:Panel ID="pnlMail" runat="server">
+                <div class="mb-3 input-group-lg">
+                    <asp:TextBox ID="txtEmail" runat="server" class="form-control" placeholder="Enter email"></asp:TextBox>
+                  <%--<small>We'll never share your email with anyone else.</small>--%>
+                  <div class="d-grid">
+                      <asp:Button ID="btnMailConfirm" runat="server" Text="Confirm" class="btn btn-lg btn-primary" OnClick="btnMailConfirm_Click" />
+                  </div>
+                    <div class="d-grid">
+                        <asp:TextBox ID="txtCode" runat="server" class="form-control" placeholder="Enter 6 digit code sent to above email id" Visible="false"></asp:TextBox>
+                  </div>
+                    <div class="d-grid">
+                    <asp:Button ID="btnCodeConfirm" runat="server" Text="Confirm" class="btn btn-lg btn-primary" Visible="false" OnClick="btnCodeConfirm_Click"/>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div class="mb-3 input-group-lg">
-              <input class="form-control" type="password" placeholder="Confirm password">
-            </div>
-            <div class="mb-3 text-start">
-            <span class="d-block" style="text-align:right;">Already have an account? <a href="Login.aspx">Sign in here</a></span>
-              <%--<input type="checkbox" class="form-check-input" id="keepsingnedCheck">
-              <label class="form-check-label" for="keepsingnedCheck"> Keep me signed in</label>--%>
-            </div>
-            <div class="d-grid"><button type="submit" class="btn btn-lg btn-primary">Sign me up</button></div>
-            
+              </asp:Panel>
+              <asp:Panel ID="pnlPswd" runat="server" Visible="false">
+                <div class="mb-3 position-relative">
+                  <div class="input-group input-group-lg">
+                      <asp:TextBox ID="txtPswd" runat="server" class="form-control" placeholder="Enter new password" TextMode="Password" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Include at least one uppercase, one lowercase, one special character, one number and 8 characters long." data-bs-original-title="" title=""></asp:TextBox>
+                  </div>
+                </div>
+                <div class="mb-3 input-group-lg">
+                    <asp:TextBox ID="txtConPswd" runat="server" placeholder="Confirm password" class="form-control" TextMode="Password"></asp:TextBox>
+                </div>
+                <div class="mb-3 text-start">
+                    <span class="d-block" style="text-align:right;">Already have an account? <a href="Login.aspx">Sign in here</a></span>
+                </div>
+                <div class="d-grid">
+                    <asp:Button ID="btnSignUp" runat="server" Text="Sign me up" class="btn btn-lg btn-primary" OnClick="btnSignUp_Click" />
+                </div>
+            </asp:Panel>
+              <asp:Label ID="lblError" runat="server" Text="" ForeColor="Red"></asp:Label>
             <p class="mb-0 mt-3">©<%: DateTime.Now.Year %> <a target="_blank" href="#">MyView</a> All rights reserved</p>
-          </form>
+          </div>
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" data-bs-theme="dark">
 <head runat="server">
-    <title>Social - Network, Community and Event Theme</title>
+    <title>User Entry</title>
 	<meta charset="utf-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 	<meta name="author" content=""/>
@@ -130,7 +130,7 @@
               <div class="col-md-6 col-lg-6">
                 <label class="form-label">Upload your pic (Required)</label><br />
                   <asp:FileUpload ID="FileUpload1" runat="server" /><br />
-						<asp:Image ID="imgPreview" Height="260px" Width="200px" runat="server" />
+						<asp:Image ID="imgPreview" Height="260px" runat="server" />
               </div>
               <div class="col-12 text-end">
                     <asp:Button ID="BtnSubmit" runat="server" Text="Go ahead" class="btn btn-primary mb-0" OnClick="BtnSubmit_Click" />

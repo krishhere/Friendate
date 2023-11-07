@@ -1,37 +1,5 @@
-/**
-* Social - Network, Community and Event Theme
-*
-* @author Webestica (https://www.webestica.com/)
-* @version 1.1.1
-**/
-
-
-/* ===================
-Table Of Content
-======================
-01 PRELOADER
-02 NAVBAR DROPDOWN HOVER
-03 TINY SLIDER
-04 TOOLTIP
-05 POPOVER
-06 VIDEO PLAYER
-07 GLIGHTBOX
-08 SIDEBAR TOGGLE START
-09 SIDEBAR TOGGLE END
-10 CHOICES
-11 AUTO RESIZE TEXTAREA
-12 DROP ZONE
-13 FLAT PICKER
-14 AVATAR IMAGE
-15 CUSTOM SCROLLBAR
-16 TOASTS
-17 PSWMETER
-18 FAKE PASSWORD
-====================== */
-
 "use strict";
 !function () {
-
 		window.Element.prototype.removeClass = function () {
 				let className = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : "",
 						selectors = this;

@@ -2,7 +2,7 @@ create database mySite;
 
 use mySite;
 
-create table users(id bigint AUTO_INCREMENT primary key,Name varchar(20),Email varchar(40),city char(15),dob varchar(12),gender tinyint,lookFor tinyint,about varchar(300),image1 mediumblob);
+create table users(id bigint AUTO_INCREMENT primary key,Name varchar(20),Email varchar(40),password varchar(12),city char(15),dob varchar(12),gender tinyint,lookFor tinyint,about varchar(300),image1 mediumblob);
 
 create table interest(id int,reading tinyint,trekking tinyint,hiking tinyint,singing tinyint,dancing tinyint,listenMusic tinyint,gardening tinyint,cooking tinyint,
 gym tinyint,foodie tinyint,travelling tinyint,art tinyint,photography tinyint,teaching tinyint,technology tinyint,coding tinyint,petCaring tinyint,outdoorGaming tinyint,indoorGaming tinyint,fashion tinyint,nightLife tinyint,daylife tinyint);
@@ -12,9 +12,9 @@ CREATE INDEX Idx_Id ON users(id);
 CREATE INDEX Idx_Email ON users(Email);
 
 DELIMITER $$;
-Create PROCEDURE Pro_User_Insert(in p_Name varchar(20),in p_Email varchar(40),in p_city char(15),in p_dob varchar(12),in p_gender tinyint,in p_lookFor tinyint,in p_about varchar(300),in p_image1 mediumblob)
+Create PROCEDURE Pro_User_Insert(in p_Name varchar(20),in p_Email varchar(40),in p_Password varchar(12),in p_city char(15),in p_dob varchar(12),in p_gender tinyint,in p_lookFor tinyint,in p_about varchar(300),in p_image1 mediumblob)
 BEGIN
-insert into users(Name,Email,city,dob,gender,lookFor,about,image1) values(p_Name,p_Email,p_city,p_dob,p_gender,p_lookFor,p_about,p_image1);
+insert into users(Name,Email,Password,city,dob,gender,lookFor,about,image1) values(p_Name,p_Email,p_Password,p_city,p_dob,p_gender,p_lookFor,p_about,p_image1);
 END $$;
 
 DELIMITER $$;
@@ -58,7 +58,3 @@ FROM mySite.users u
 INNER JOIN mySite.interest i ON u.id = i.id)
 SELECT id,Name,gender,city,lookFor,about,image1,CONCAT_WS(',', reading,trekking,hiking,singing,dancing,listenMusic,gardening,cooking,gym,foodie,travelling,art,photography,teaching,technology,coding,petCaring,outdoorGaming,indoorGaming,fashion,nightLife,daylife) AS interests
 FROM cte;
-
-delete from mySite.users where id=3;
-
-delete FROM mySite.interest  where id=3;

@@ -15,7 +15,6 @@ namespace WebApplication
         static DataTable dt;
         int maxCount;
         string[] arryInterests;
-        List<string> listInterests = new List<string>();
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
@@ -86,8 +85,6 @@ namespace WebApplication
                     if (i == 0)
                     {
                         value = value + "friend";
-                        //liLnkFriendItem.Style.Add("display", "contents");
-                        //liLnkDateItem.Style.Add("display", "none");
                         lbFriend.Visible = true;
                         lbDate.Visible = false;
                     }
@@ -96,14 +93,10 @@ namespace WebApplication
                         value = value + "date";
                         lbDate.Visible = true;
                         lbFriend.Visible = false;
-                        //liLnkDateItem.Style.Add("display", "contents");
-                        //liLnkFriendItem.Style.Add("display", "none");
                     }
                     else
                     {
                         value = value + "friend or date";
-                        //liLnkFriendItem.Style.Add("display", "contents");
-                        //liLnkDateItem.Style.Add("display", "contents");
                         lbFriend.Visible = true;
                         lbDate.Visible = true;
                     }
@@ -118,10 +111,6 @@ namespace WebApplication
                 DataRowView drInterest = (DataRowView)e.Item.DataItem;
                 string strInterests = drInterest["interests"].ToString();
                 arryInterests = strInterests.Split(',');
-                //foreach (string interest in arryInterests)
-                //{
-                //    listInterests.Add(interest);
-                //}
                 rptInterest.DataSource = arryInterests;
                 rptInterest.DataBind();
             }

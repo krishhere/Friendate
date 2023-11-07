@@ -28,6 +28,7 @@ namespace WebApplication
         string cookieEmail = "salngEmail";
         static string city;
         static string name;
+        static string email;
         List<string> lstInterst = new List<string>();
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -47,13 +48,13 @@ namespace WebApplication
                     }
                     name = HttpContext.Current.Request.Cookies[cookieName].Value;
                     txtName.Text = name;
-                    if (city == null)
-                    {
-                        //city = GetLocation();
-                        city = "Hyd";
-                    }
-                    txtCity.Text = city;
                 }
+                if (city == null)
+                {
+                    //city = GetLocation();
+                    city = "Hyd";
+                }
+                txtCity.Text = city;
             }
         }
         public void GetToken(string code)
@@ -93,25 +94,14 @@ namespace WebApplication
             JavaScriptSerializer js = new JavaScriptSerializer();
             Userclass userinfo = js.Deserialize<Userclass>(responseFromServer);
             string id = userinfo.id;
-            string email = userinfo.email;
+            email = userinfo.email;
             string locale = userinfo.locale;
             string name = userinfo.name;
-            StoreValueInCookies("salngEmail", email);
-            StoreValueInCookies("salngName", name);
-        }
-        private void StoreValueInCookies(string key, string value)
-        {
-            HttpCookie cookie = new HttpCookie(key);
-            cookie.Value = value;
-            cookie.Expires = DateTime.Now.AddYears(1);
-            HttpContext.Current.Response.Cookies.Add(cookie);
         }
         protected void BtnSubmit_Click(object sender, EventArgs e)
         {
             try
             {
-                int jj = multiSelectListBox.Items.Count;
-                
                 foreach (ListItem item in multiSelectListBox.Items)
                 {
                     if (item.Selected)
@@ -122,17 +112,16 @@ namespace WebApplication
                 }
                 
                 string imgType = FileUpload1.PostedFile.ContentType.ToString();
-                if (txtDob.Text.Trim() != "" && txtAbout.Text.Trim() != ""&& imgType.Contains("jpeg"))
+                if (txtDob.Text.Trim() != "" && txtAbout.Text.Trim() != "" && imgType.Contains("jpeg"))
                 {
-                    string email = HttpContext.Current.Request.Cookies[cookieEmail].Value;
+                    email = HttpContext.Current.Request.Cookies[cookieEmail].Value;
                     UserInsert(email);
                     int id = BindUserId(email);
                     Thread.Sleep(1000);
                     UploadInterests(id);
-                    txtCity.Text = "";
-                    txtDob.Text = "";
-                    txtAbout.Text = "";
-                    Response.Redirect("Default.aspx");
+                    StoreValueInCookies("salngEmail", email);
+                    StoreValueInCookies("salngName", name);
+                    Response.Redirect("Default.aspx",false);
                 }
                 else
                 {
@@ -177,42 +166,44 @@ namespace WebApplication
                     return;
                 }
 
-                MySqlParameter[] msp = new MySqlParameter[8];
+                MySqlParameter[] msp = new MySqlParameter[9];
                 msp[0] = new MySqlParameter("p_Name", MySqlDbType.VarChar);
                 msp[1] = new MySqlParameter("p_Email", MySqlDbType.VarChar);
-                msp[2] = new MySqlParameter("p_city", MySqlDbType.VarChar);
-                msp[3] = new MySqlParameter("p_dob", MySqlDbType.VarChar);
-                msp[4] = new MySqlParameter("p_gender", MySqlDbType.Int16);
-                msp[5] = new MySqlParameter("p_lookFor", MySqlDbType.Int16);
-                msp[6] = new MySqlParameter("p_about", MySqlDbType.VarChar);
-                msp[7] = new MySqlParameter("p_image1", MySqlDbType.MediumBlob);
+                msp[2] = new MySqlParameter("p_Password", MySqlDbType.VarChar);
+                msp[3] = new MySqlParameter("p_city", MySqlDbType.VarChar);
+                msp[4] = new MySqlParameter("p_dob", MySqlDbType.VarChar);
+                msp[5] = new MySqlParameter("p_gender", MySqlDbType.Int16);
+                msp[6] = new MySqlParameter("p_lookFor", MySqlDbType.Int16);
+                msp[7] = new MySqlParameter("p_about", MySqlDbType.VarChar);
+                msp[8] = new MySqlParameter("p_image1", MySqlDbType.MediumBlob);
 
-                msp[0].Value = txtName.Text;
+                msp[0].Value = txtName.Text.Trim();
                 msp[1].Value = email;
-                msp[2].Value = txtCity.Text.Trim();
-                msp[3].Value = txtDob.Text.Trim();
+                msp[2].Value = Session["password"].ToString();
+                msp[3].Value = txtCity.Text.Trim();
+                msp[4].Value = txtDob.Text.Trim();
                 if (ddlGen.SelectedValue == "Female")
-                {
-                    msp[4].Value = 0;
-                }
-                else
-                {
-                    msp[4].Value = 1;
-                }
-                if (ddlLookingFor.SelectedValue == "Friend")
                 {
                     msp[5].Value = 0;
                 }
-                else if (ddlLookingFor.SelectedValue == "Date")
+                else
                 {
                     msp[5].Value = 1;
                 }
+                if (ddlLookingFor.SelectedValue == "Friend")
+                {
+                    msp[6].Value = 0;
+                }
+                else if (ddlLookingFor.SelectedValue == "Date")
+                {
+                    msp[6].Value = 1;
+                }
                 else
                 {
-                    msp[5].Value = 2;
+                    msp[6].Value = 2;
                 }
-                msp[6].Value = txtAbout.Text.Trim();
-                msp[7].Value = bytes;
+                msp[7].Value = txtAbout.Text.Trim();
+                msp[8].Value = bytes;
 
                 MySqlCommand cmd2 = new MySqlCommand();
                 cmd2.Connection = con;
@@ -471,6 +462,13 @@ namespace WebApplication
             {
                 con.Close();
             }
+        }
+        private void StoreValueInCookies(string key, string value)
+        {
+            HttpCookie cookie = new HttpCookie(key);
+            cookie.Value = value;
+            cookie.Expires = DateTime.Now.AddYears(1);
+            HttpContext.Current.Response.Cookies.Add(cookie);
         }
         private string GetLocation()
         {

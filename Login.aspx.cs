@@ -11,7 +11,7 @@ namespace WebApplication
         {
             string cookieName = "salngName";
             string cookieEmail = "salngEmail";
-            if (HttpContext.Current.Request.Cookies[cookieName] != null && HttpContext.Current.Request.Cookies[cookieEmail] != null)
+            if (HttpContext.Current.Request.Cookies[cookieEmail] != null)
             {
                 Response.Redirect("Default.aspx");
             }
