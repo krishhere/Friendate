@@ -161,7 +161,7 @@
               <div class="d-flex align-items-center position-relative">
               </div>
               <a class="dropdown-item btn btn-primary-soft btn-sm my-2 text-center" href="my-profile.html">
-				  <asp:Label ID="lblProfileName" runat="server" Text=""></asp:Label>
+				  <asp:Label ID="lblProfileName" runat="server" Text="" Font-Bold="true" Font-Size="16px"></asp:Label>
               </a>
             </li>
 

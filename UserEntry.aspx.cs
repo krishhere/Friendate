@@ -151,7 +151,7 @@ namespace WebApplication
                 {
                     image.Format = image.Format;
                     image.Resize(540, 540);
-                    image.Quality = 50;
+                    image.Quality = 70;
                     var memStream = new MemoryStream();
                     image.Write(memStream);   //image.Write(@"C:\Users\krish\OneDrive\Desktop\lowSize\YourFinalImage.jpg");
                     bytes = image.ToByteArray();
