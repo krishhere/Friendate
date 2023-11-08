@@ -59,3 +59,7 @@ FROM mySite.users u
 INNER JOIN mySite.interest i ON u.id = i.id)
 SELECT id,Name,gender,city,lookFor,about,image1,CONCAT_WS(',', reading,trekking,hiking,singing,dancing,listenMusic,gardening,cooking,gym,foodie,travelling,art,photography,teaching,technology,coding,petCaring,outdoorGaming,indoorGaming,fashion,nightLife,daylife,investing,business) AS interests
 FROM cte order by rand() limit 5;
+
+SELECT table_schema AS "Database",ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS "SizeInMB" FROM information_schema.TABLES WHERE table_schema = "mysite" GROUP BY table_schema;
+
+SELECT table_name AS "Table",ROUND(((data_length + index_length) / 1024 / 1024), 2) AS "SizeInMB" FROM information_schema.TABLES WHERE table_schema = "mysite" ORDER BY (data_length + index_length) DESC;

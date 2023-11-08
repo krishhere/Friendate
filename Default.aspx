@@ -111,11 +111,11 @@
                   </script>
 
                   <div class="nav nav-pills nav-pills-light nav-fill nav-stack small border-top my-top">
-                    <asp:LinkButton ID="lnkFriend" runat="server" Text="<i class='bi bi-heart pe-1'></i> Friend" class="nav-link mb-0" style="float:left;" />
-                    <asp:LinkButton ID="lnkDate" runat="server" Text="<i class='bi bi-heart pe-1'></i> Date" class="nav-link mb-0" style="float:left;" />
+                    <asp:LinkButton ID="lnkFriend" runat="server" Text="<i class='bi bi-heart pe-1'></i> Friend" class="nav-link mb-0" style="float:left;" Font-Bold="true" />
+                    <asp:LinkButton ID="lnkDate" runat="server" Text="<i class='bi bi-heart pe-1'></i> Date" class="nav-link mb-0" style="float:left;" Font-Bold="true" />
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link mb-0" id="cardShareAction" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-reply-fill flip-horizontal ps-1"></i>Share
+                            <b><i class="bi bi-reply-fill flip-horizontal ps-1"></i>Share</b>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction">
                             <li><a class="dropdown-item" href="#"><i class="bi bi-envelope fa-fw pe-2"></i>Facebook</a></li>
