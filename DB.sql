@@ -18,10 +18,9 @@ insert into users(Name,Email,Password,city,dob,gender,lookFor,about,image1) valu
 END $$;
 
 DELIMITER $$;
-Create PROCEDURE Pro_UserInterests_Insert(in p_id tinyint,in p_reading tinyint,in p_trekking tinyint,in p_hiking tinyint,in p_singing tinyint,in p_dancing tinyint,in p_listenMusic tinyint,in p_gardening tinyint,in p_cooking tinyint,in p_gym tinyint,in p_foodie tinyint,in p_travelling tinyint,in p_art tinyint,in p_photography tinyint,in p_teaching tinyint,in p_technology tinyint,in p_coding tinyint,in p_petCaring tinyint,in p_outdoorGaming tinyint,in p_indoorGaming tinyint,in p_fashion tinyint,in p_nightLife tinyint,p_daylife tinyint)
+Create PROCEDURE Pro_UserInterests_Insert(in p_id tinyint,in p_reading tinyint,in p_trekking tinyint,in p_hiking tinyint,in p_singing tinyint,in p_dancing tinyint,in p_listenMusic tinyint,in p_gardening tinyint,in p_cooking tinyint,in p_gym tinyint,in p_foodie tinyint,in p_travelling tinyint,in p_art tinyint,in p_photography tinyint,in p_teaching tinyint,in p_technology tinyint,in p_coding tinyint,in p_petCaring tinyint,in p_outdoorGaming tinyint,in p_indoorGaming tinyint,in p_fashion tinyint,in p_nightLife tinyint,p_daylife tinyint,p_investing tinyint,p_business tinyint)
 BEGIN
-insert into interest(id,reading,trekking,hiking,singing,dancing,listenMusic,gardening,cooking,gym,foodie,travelling,art,photography,teaching,technology,coding,petCaring,outdoorGaming,indoorGaming,fashion,nightLife,daylife)
-values(p_id,p_reading,p_trekking,p_hiking,p_singing,p_dancing,p_listenMusic,p_gardening,p_cooking,p_gym,p_foodie,p_travelling,p_art,p_photography,p_teaching,p_technology,p_coding,p_petCaring,p_outdoorGaming,p_indoorGaming,p_fashion,p_nightLife,p_daylife);
+insert into interest(id,reading,trekking,hiking,singing,dancing,listenMusic,gardening,cooking,gym,foodie,travelling,art,photography,teaching,technology,coding,petCaring,outdoorGaming,indoorGaming,fashion,nightLife,daylife,investing,business)values(p_id,p_reading,p_trekking,p_hiking,p_singing,p_dancing,p_listenMusic,p_gardening,p_cooking,p_gym,p_foodie,p_travelling,p_art,p_photography,p_teaching,p_technology,p_coding,p_petCaring,p_outdoorGaming,p_indoorGaming,p_fashion,p_nightLife,p_daylife,p_investing,p_business);
 END $$;
 
 SELECT * FROM mySite.users;
@@ -53,8 +52,10 @@ SELECT u.id id,Name,gender,city,lookFor,about,image1,
 	IF(i.indoorGaming = 1, 'Indoor gaming', NULL) AS indoorGaming,
 	IF(i.fashion = 1, 'Fashion', NULL) AS fashion,
     IF(i.nightLife = 1, 'Night life', NULL) AS nightLife,
-	IF(i.daylife = 1, 'Day life', NULL) AS daylife
+	IF(i.daylife = 1, 'Day life', NULL) AS daylife,
+    IF(i.investing = 1, 'Investing', NULL) AS investing,
+	IF(i.business = 1, 'Business', NULL) AS business
 FROM mySite.users u
 INNER JOIN mySite.interest i ON u.id = i.id)
-SELECT id,Name,gender,city,lookFor,about,image1,CONCAT_WS(',', reading,trekking,hiking,singing,dancing,listenMusic,gardening,cooking,gym,foodie,travelling,art,photography,teaching,technology,coding,petCaring,outdoorGaming,indoorGaming,fashion,nightLife,daylife) AS interests
-FROM cte;
+SELECT id,Name,gender,city,lookFor,about,image1,CONCAT_WS(',', reading,trekking,hiking,singing,dancing,listenMusic,gardening,cooking,gym,foodie,travelling,art,photography,teaching,technology,coding,petCaring,outdoorGaming,indoorGaming,fashion,nightLife,daylife,investing,business) AS interests
+FROM cte order by rand() limit 5;

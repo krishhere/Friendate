@@ -125,6 +125,8 @@
                     <asp:ListItem Text="fashion" Value="fashion" />
                     <asp:ListItem Text="night Life" Value="nightLife" />
                     <asp:ListItem Text="day Life" Value="daylife" />
+                    <asp:ListItem Text="investing" Value="investing" />
+                    <asp:ListItem Text="business" Value="business" />
                 </asp:ListBox>
               </div>
               <div class="col-md-6 col-lg-6">
