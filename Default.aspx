@@ -5,6 +5,9 @@
 	<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+    <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+        <ContentTemplate>
 <main>
   <div class="container-fluid">
     <div class="row justify-content-between g-0">
@@ -35,7 +38,6 @@
           </ul>
         </div>
         <!-- Card feed item START -->
-
     <asp:Repeater ID="rptUsers" runat="server" OnItemDataBound="rptUsers_ItemDataBound">
         <ItemTemplate>
             <div class="card">
@@ -121,30 +123,13 @@
                         </ul>
                     </li>
                   </div>
-                <%--<ul class="nav nav-pills nav-pills-light nav-fill nav-stack small border-top my-top">
-                  <li class="nav-item" ID="liLnkFriend" runat = "server">
-                      <asp:LinkButton ID="lnkFriend1" runat="server" Text="<i class='bi bi-heart pe-1'></i> Friend" class="nav-link mb-0" />
-                  </li>
-                  <li class="nav-item" ID="liLnkDate" runat = "server">
-                      <asp:LinkButton ID="lnkDate1" runat="server" Text="<i class='bi bi-heart pe-1'></i> Date" class="nav-link mb-0" />
-                  </li>
-                  <li class="nav-item dropdown">
-                    <a href="#" class="nav-link mb-0" id="cardShareAction" data-bs-toggle="dropdown" aria-expanded="false">
-                      <i class="bi bi-reply-fill flip-horizontal ps-1"></i>Share
-                    </a>
-                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction">
-                      <li><a class="dropdown-item" href="#"> <i class="bi bi-envelope fa-fw pe-2"></i>Facebook</a></li>
-                      <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark-check fa-fw pe-2"></i>whatsapp </a></li>
-                    </ul>
-                  </li>
-                </ul>--%>
               </div>
             </div>
         </ItemTemplate>
     </asp:Repeater>
           <!-- Card feed item END -->
-
-        <!-- Card feed item START -->
+          
+        <!-- Card ads START -->
         <div class="card">
           <div class="card-header">
             <div class="d-flex align-items-center justify-content-between">
@@ -176,18 +161,10 @@
             <a class="btn btn-primary-soft btn-sm" href="#"> Download now </a>
           </div>
         </div>
-        <!-- Card feed item END -->
+        <!-- Card ads END -->
 
           <!-- Load more button START -->
-          <a href="#!" role="button" class="btn btn-loader btn-primary-soft" data-bs-toggle="button" aria-pressed="true">
-            <span class="load-text"> Load more </span>
-            <div class="load-icon">
-              <div class="spinner-grow spinner-grow-sm" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </div>
-          </a>
-
+          <asp:Button ID="btnLoadMore" Text="Load more " runat="server" OnClick="btnLoadMore_Click" class="btn btn-loader btn-primary-soft"/>
       </div>
       <!-- Main content END -->
 
@@ -207,4 +184,6 @@
 <script src="assets/vendor/zuck.js/dist/zuck.min.js"></script>
 <script src="assets/js/zuck-stories.js"></script>
 <script src="assets/js/functions.js"></script>
+            </ContentTemplate>
+    </asp:UpdatePanel>
 </asp:Content>

@@ -6,57 +6,30 @@ using System.Data;
 using System.Web.UI;
 using System.Collections.Generic;
 using System.Web.UI.HtmlControls;
+using System.Web.Services;
+using System.IO;
 
 namespace WebApplication
 {
     public partial class Default : System.Web.UI.Page
     {
         MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["dbConnectionString"].ConnectionString);
-        static DataTable dt;
+        
         int maxCount;
         string[] arryInterests;
         protected void Page_Load(object sender, EventArgs e)
         {
+            maxCount = MaxRecord();
             if (!Page.IsPostBack)
             {
                 maxCount = MaxRecord();
-                dt = BindTopics();
-
+                Data data = new Data();
+                DataTable dt = data.GetRandomDataRecords(5);
+                Session["DataTable"] = dt;
                 rptUsers.DataSource = dt;
                 rptUsers.DataBind();
-                ScriptManager.RegisterStartupScript(Page, Page.GetType(), "swiperInit", "initSwiper();", true);
             }
-        }
-        private int random()
-        {
-            int num;
-            Random random = new Random();
-            num = random.Next(1, maxCount);
-            return num;
-        }
-        protected DataTable BindTopics()
-        {
-            DataTable dt = new DataTable();
-            try
-            {
-                con.Open();
-                MySqlCommand cmd = con.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                string que = "with cte as(SELECT u.id id,Name,gender,city,lookFor,about,image1,IF(i.reading=1,'Reading',NULL) AS reading,IF(i.trekking=1,'Trekking',NULL) AS trekking,IF(i.hiking=1,'Hiking',NULL) AS hiking,IF(i.singing=1,'Singing',NULL) AS singing,IF(i.dancing=1,'Dancing',NULL) AS dancing,IF(i.listenMusic=1,'Music lover',NULL) AS listenMusic,IF(i.gardening=1,'Gardening',NULL) AS gardening,IF(i.cooking=1,'Cooking',NULL) AS cooking,IF(i.gym=1,'Gym',NULL) AS gym,IF(i.foodie=1,'Foodie',NULL) AS foodie,IF(i.travelling=1,'travelling',NULL) AS travelling,IF(i.art=1,'Artist',NULL) AS art,IF(i.photography=1,'Photography',NULL) AS photography,IF(i.teaching=1,'Teaching',NULL) AS teaching,IF(i.technology=1,'Technology',NULL) AS technology,IF(i.coding=1,'Coding',NULL) AS coding,IF(i.petCaring=1,'Pet caring',NULL) AS petCaring,IF(i.outdoorGaming=1,'Outdoor gaming',NULL) AS outdoorGaming,IF(i.indoorGaming=1,'Indoor gaming',NULL) AS indoorGaming,IF(i.fashion=1,'Fashion',NULL) AS fashion,IF(i.nightLife=1,'Night life',NULL) AS nightLife,IF(i.daylife = 1, 'Day life', NULL) AS daylife FROM mySite.users u INNER JOIN mySite.interest i ON u.id = i.id) SELECT id,Name,gender,city,lookFor,about,image1,CONCAT_WS(',', reading,trekking,hiking,singing,dancing,listenMusic,gardening,cooking,gym,foodie,travelling,art,photography,teaching,technology,coding,petCaring,outdoorGaming,indoorGaming,fashion,nightLife,daylife) AS interests FROM cte ORDER BY RAND() LIMIT 5";
-                cmd.CommandText = que;
-                cmd.ExecuteNonQuery();
-                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                da.Fill(dt);
-            }
-            catch (Exception ex)
-            {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "alert('Technical issues. please try later');", true);
-            }
-            finally
-            {
-                con.Close();
-            }
-            return dt;
+            ScriptManager.RegisterStartupScript(Page, Page.GetType(), "swiperInit", "initSwiper();", true);
         }
         protected void rptUsers_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
@@ -117,15 +90,6 @@ namespace WebApplication
             Label LookFor = e.Item.FindControl("lblInterest") as Label;
             LookFor.Text = e.Item.DataItem.ToString();
         }
-        private void GetOneDataRadomly()
-        {
-            int j = random();
-            DataTable dataTable = dt.Clone();
-            DataRow dr = dt.Rows[j];
-            dataTable.Rows.Add(dr.ItemArray);
-            rptUsers.DataSource = dataTable;
-            rptUsers.DataBind();
-        }
         protected int MaxRecord()
         {
             int cnt = 0;
@@ -152,6 +116,24 @@ namespace WebApplication
                 con.Close();
             }
             return cnt;
+        }
+        protected void btnLoadMore_Click(object sender, EventArgs e)
+        {
+            DataTable existingData = (DataTable)Session["DataTable"];
+            Session.Remove("DataTable");
+            Data dataAccess = new Data();
+            DataTable NewDt = dataAccess.GetRandomDataRecords(5);
+            existingData.Merge(NewDt);
+            Session["DataTable"] = existingData;
+            rptUsers.DataSource = existingData;
+            rptUsers.DataBind();
+        }
+        private int random()
+        {
+            int num;
+            Random random = new Random();
+            num = random.Next(1, maxCount);
+            return num;
         }
     }
 }
