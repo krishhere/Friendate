@@ -8,13 +8,14 @@ using System.Collections.Generic;
 using System.Web.UI.HtmlControls;
 using System.Web.Services;
 using System.IO;
+using System.Web;
 
 namespace WebApplication
 {
     public partial class Default : System.Web.UI.Page
     {
         MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["dbConnectionString"].ConnectionString);
-        
+
         int maxCount;
         string[] arryInterests;
         protected void Page_Load(object sender, EventArgs e)
@@ -83,6 +84,31 @@ namespace WebApplication
                 arryInterests = strInterests.Split(',');
                 rptInterest.DataSource = arryInterests;
                 rptInterest.DataBind();
+
+                int profileId = Convert.ToInt32(HttpContext.Current.Request.Cookies["salngId"].Value);
+                int userId = Convert.ToInt32((e.Item.FindControl("lblId") as Label).Text);
+                string queryFriend = $"select * from FriendRequest where profileid={profileId} and userId={userId}";
+                bool flag = IsRequest(queryFriend);
+                if (flag == true)
+                {
+                    LinkButton linkButtonFriend = e.Item.FindControl("lnkFriend") as LinkButton;
+                    linkButtonFriend.Style["color"] = "red";
+                    LinkButton linkButtonDate = e.Item.FindControl("lnkDate") as LinkButton;
+                    linkButtonDate.Style["color"] = "#a1a1a8";
+                    linkButtonDate.Style["text-decoration"] = "line-through";
+                    linkButtonDate.Enabled = false;
+                }
+                string queryDate = $"select * from DateRequest where profileid={profileId} and userId={userId}";
+                bool flag1 = IsRequest(queryDate);
+                if (flag1 == true)
+                {
+                    LinkButton linkButtonDate = e.Item.FindControl("lnkDate") as LinkButton;
+                    linkButtonDate.Style["color"] = "red";
+                    LinkButton linkButtonFriend = e.Item.FindControl("lnkFriend") as LinkButton;
+                    linkButtonFriend.Style["color"] = "#a1a1a8";
+                    linkButtonFriend.Style["text-decoration"] = "line-through";
+                    linkButtonFriend.Enabled = false;
+                }
             }
         }
         protected void rptUserInterests_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -127,6 +153,128 @@ namespace WebApplication
             Session["DataTable"] = existingData;
             rptUsers.DataSource = existingData;
             rptUsers.DataBind();
+        }
+        protected void lnkFriend_Click(object sender, EventArgs e)
+        {
+            RepeaterItem item = (sender as LinkButton).NamingContainer as RepeaterItem;
+
+            int profileId = Convert.ToInt32(HttpContext.Current.Request.Cookies["salngId"].Value);
+            int userId = Convert.ToInt32((item.FindControl("lblId") as Label).Text);
+            FriendRequest(profileId,userId);
+            LinkButton linkButtonFriend = item.FindControl("lnkFriend") as LinkButton;
+            linkButtonFriend.Style["color"] = "red";
+            LinkButton linkButtonDate = item.FindControl("lnkDate") as LinkButton;
+            linkButtonDate.Style["color"] = "#a1a1a8";
+            linkButtonDate.Style["text-decoration"] = "line-through";
+            linkButtonDate.Enabled = false;
+        }
+        protected void lnkDate_Click(object sender, EventArgs e)
+        {
+            int profileId = Convert.ToInt32(HttpContext.Current.Request.Cookies["salngId"].Value);
+            RepeaterItem item = (sender as LinkButton).NamingContainer as RepeaterItem;
+            int userId = Convert.ToInt32((item.FindControl("lblId") as Label).Text);
+            DateRequest(profileId, userId);
+            LinkButton linkButtonDate = item.FindControl("lnkDate") as LinkButton;
+            linkButtonDate.Style["color"] = "red";
+            LinkButton linkButtonFriend = item.FindControl("lnkFriend") as LinkButton;
+            linkButtonFriend.Style["color"] = "#a1a1a8";
+            linkButtonFriend.Style["text-decoration"] = "line-through";
+            linkButtonFriend.Enabled = false;
+        }
+        private void FriendRequest(int profileId,int userId)
+        {
+            try
+            {
+                string queryFriend = $"select * from FriendRequest where profileid={profileId} and userId={userId}";
+                bool flag = IsRequest(queryFriend);
+                if (flag == true)
+                {
+                    return;
+                }
+
+                MySqlParameter[] msp = new MySqlParameter[2];
+                msp[0] = new MySqlParameter("p_profileId", MySqlDbType.Int32);
+                msp[1] = new MySqlParameter("p_userId", MySqlDbType.Int32);
+
+                msp[0].Value = profileId;
+                msp[1].Value = userId;
+
+                MySqlCommand cmd2 = new MySqlCommand();
+                cmd2.Connection = con;
+                cmd2.CommandType = CommandType.StoredProcedure;
+                cmd2.CommandText = "Pro_FriendRequests";
+                cmd2.Parameters.AddRange(msp);
+                con.Open();
+                cmd2.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+        private void DateRequest(int profileId, int userId)
+        {
+            try
+            {
+                string queryDate = $"select * from DateRequest where profileid={profileId} and userId={userId}";
+                bool flag = IsRequest(queryDate);
+                if (flag == true)
+                {
+                    return;
+                }
+
+                MySqlParameter[] msp = new MySqlParameter[2];
+                msp[0] = new MySqlParameter("p_profileId", MySqlDbType.Int32);
+                msp[1] = new MySqlParameter("p_userId", MySqlDbType.Int32);
+
+                msp[0].Value = profileId;
+                msp[1].Value = userId;
+
+                MySqlCommand cmd2 = new MySqlCommand();
+                cmd2.Connection = con;
+                cmd2.CommandType = CommandType.StoredProcedure;
+                cmd2.CommandText = "Pro_DateRequests";
+                cmd2.Parameters.AddRange(msp);
+                con.Open();
+                cmd2.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+        private bool IsRequest(string query)
+        {
+            bool flag = false;
+            try
+            {
+                con.Open();
+                MySqlDataReader dr = null;
+                MySqlCommand cmd = con.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = query;
+                dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    flag = true;
+                    break;
+                }
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "alert('Technical issues. please try later');", true);
+            }
+            finally
+            {
+                con.Close();
+            }
+            return flag;
         }
         private int random()
         {

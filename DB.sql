@@ -7,6 +7,10 @@ create table users(id bigint AUTO_INCREMENT primary key,Name varchar(20),Email v
 create table interest(id int,reading tinyint,trekking tinyint,hiking tinyint,singing tinyint,dancing tinyint,listenMusic tinyint,gardening tinyint,cooking tinyint,
 gym tinyint,foodie tinyint,travelling tinyint,art tinyint,photography tinyint,teaching tinyint,technology tinyint,coding tinyint,petCaring tinyint,outdoorGaming tinyint,indoorGaming tinyint,fashion tinyint,nightLife tinyint,daylife tinyint);
 
+create table FriendRequest(profileId bigint,userId bigint);
+
+create table DateRequest(profileId bigint,userId bigint);
+
 CREATE INDEX Idx_Id ON users(id);
 
 CREATE INDEX Idx_Email ON users(Email);
@@ -21,6 +25,18 @@ DELIMITER $$;
 Create PROCEDURE Pro_UserInterests_Insert(in p_id tinyint,in p_reading tinyint,in p_trekking tinyint,in p_hiking tinyint,in p_singing tinyint,in p_dancing tinyint,in p_listenMusic tinyint,in p_gardening tinyint,in p_cooking tinyint,in p_gym tinyint,in p_foodie tinyint,in p_travelling tinyint,in p_art tinyint,in p_photography tinyint,in p_teaching tinyint,in p_technology tinyint,in p_coding tinyint,in p_petCaring tinyint,in p_outdoorGaming tinyint,in p_indoorGaming tinyint,in p_fashion tinyint,in p_nightLife tinyint,p_daylife tinyint,p_investing tinyint,p_business tinyint)
 BEGIN
 insert into interest(id,reading,trekking,hiking,singing,dancing,listenMusic,gardening,cooking,gym,foodie,travelling,art,photography,teaching,technology,coding,petCaring,outdoorGaming,indoorGaming,fashion,nightLife,daylife,investing,business)values(p_id,p_reading,p_trekking,p_hiking,p_singing,p_dancing,p_listenMusic,p_gardening,p_cooking,p_gym,p_foodie,p_travelling,p_art,p_photography,p_teaching,p_technology,p_coding,p_petCaring,p_outdoorGaming,p_indoorGaming,p_fashion,p_nightLife,p_daylife,p_investing,p_business);
+END $$;
+
+DELIMITER $$;
+Create PROCEDURE Pro_FriendRequests(in p_profileId bigint,p_userId bigint)
+BEGIN
+insert into FriendRequest(profileId,userId) values(p_profileId,p_userId);
+END $$;
+
+DELIMITER $$;
+Create PROCEDURE Pro_DateRequests(in p_profileId bigint,p_userId bigint)
+BEGIN
+insert into DateRequest(profileId,userId) values(p_profileId,p_userId);
 END $$;
 
 SELECT * FROM mySite.users;

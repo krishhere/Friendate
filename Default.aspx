@@ -111,8 +111,8 @@
                   </script>
 
                   <div class="nav nav-pills nav-pills-light nav-fill nav-stack small border-top my-top">
-                    <asp:LinkButton ID="lnkFriend" runat="server" Text="<i class='bi bi-heart pe-1'></i> Friend" class="nav-link mb-0" style="float:left;" Font-Bold="true" />
-                    <asp:LinkButton ID="lnkDate" runat="server" Text="<i class='bi bi-heart pe-1'></i> Date" class="nav-link mb-0" style="float:left;" Font-Bold="true" />
+                    <asp:LinkButton ID="lnkFriend" runat="server" Text="<i class='bi bi-heart pe-1'></i> Friend" OnClick="lnkFriend_Click" class="nav-link mb-0" style="float:left;" Font-Bold="true" />
+                    <asp:LinkButton ID="lnkDate" runat="server" Text="<i class='bi bi-heart pe-1'></i> Date" OnClick="lnkDate_Click" class="nav-link mb-0" style="float:left;" Font-Bold="true" />
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link mb-0" id="cardShareAction" data-bs-toggle="dropdown" aria-expanded="false">
                             <b><i class="bi bi-reply-fill flip-horizontal ps-1"></i>Share</b>
@@ -164,7 +164,7 @@
         <!-- Card ads END -->
 
           <!-- Load more button START -->
-          <asp:Button ID="btnLoadMore" Text="Load more " runat="server" OnClick="btnLoadMore_Click" class="btn btn-loader btn-primary-soft"/>
+          <asp:Button ID="btnLoadMore" Text="Load more..." runat="server" OnClick="btnLoadMore_Click" class="btn btn-loader btn-primary-soft"/>
       </div>
       <!-- Main content END -->
 

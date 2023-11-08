@@ -59,6 +59,7 @@ namespace WebApplication
         {
             RemoveValueInCookies("salngEmail");
             RemoveValueInCookies("salngName");
+            RemoveValueInCookies("salngId");
             Response.Redirect("Login.aspx");
         }
         private void RemoveValueInCookies(string key)

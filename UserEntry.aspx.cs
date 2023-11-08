@@ -18,12 +18,12 @@ namespace WebApplication
 {
     public partial class UserEntry : Page
     {
+        MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["dbConnectionString"].ConnectionString);
+
         string clientid = "784366017075-stgfbdmbddfkci4gm7esiqqd5uov31k8.apps.googleusercontent.com";
         string clientsecret = "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";
         string redirection_url = "https://localhost:44329/UserEntry.aspx";
         string url = "https://accounts.google.com/o/oauth2/token";
-        MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["dbConnectionString"].ConnectionString);
-
         string cookieName = "salngName";
         string cookieEmail = "salngEmail";
         static string city;
@@ -120,6 +120,7 @@ namespace WebApplication
                     Thread.Sleep(1000);
                     UploadInterests(id);
                     StoreValueInCookies("salngEmail", email);
+                    StoreValueInCookies("salngId", id.ToString());
                     StoreValueInCookies("salngName", name);
                     Response.Redirect("Default.aspx",false);
                 }
@@ -151,7 +152,7 @@ namespace WebApplication
                 {
                     image.Format = image.Format;
                     image.Resize(540, 540);
-                    image.Quality = 70;
+                    image.Quality = 80;
                     var memStream = new MemoryStream();
                     image.Write(memStream);   //image.Write(@"C:\Users\krish\OneDrive\Desktop\lowSize\YourFinalImage.jpg");
                     bytes = image.ToByteArray();
