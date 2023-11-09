@@ -92,11 +92,12 @@ namespace WebApplication
                 if (flag == true)
                 {
                     LinkButton linkButtonFriend = e.Item.FindControl("lnkFriend") as LinkButton;
-                    linkButtonFriend.Style["color"] = "red";
+                    linkButtonFriend.Style["color"] = "#0047ff";
                     LinkButton linkButtonDate = e.Item.FindControl("lnkDate") as LinkButton;
                     linkButtonDate.Style["color"] = "#a1a1a8";
                     linkButtonDate.Style["text-decoration"] = "line-through";
-                    linkButtonDate.Enabled = false;
+                    linkButtonDate.Style["cursor"] = "not-allowed";
+                    linkButtonDate.Style["pointer-events"] = "none";
                 }
                 string queryDate = $"select * from DateRequest where profileid={profileId} and userId={userId}";
                 bool flag1 = IsRequest(queryDate);
@@ -107,7 +108,8 @@ namespace WebApplication
                     LinkButton linkButtonFriend = e.Item.FindControl("lnkFriend") as LinkButton;
                     linkButtonFriend.Style["color"] = "#a1a1a8";
                     linkButtonFriend.Style["text-decoration"] = "line-through";
-                    linkButtonFriend.Enabled = false;
+                    linkButtonFriend.Style["cursor"] = "not-allowed";
+                    linkButtonFriend.Style["pointer-events"] = "none";
                 }
             }
         }
@@ -162,11 +164,12 @@ namespace WebApplication
             int userId = Convert.ToInt32((item.FindControl("lblId") as Label).Text);
             FriendRequest(profileId,userId);
             LinkButton linkButtonFriend = item.FindControl("lnkFriend") as LinkButton;
-            linkButtonFriend.Style["color"] = "red";
+            linkButtonFriend.Style["color"] = "#0047ff";
             LinkButton linkButtonDate = item.FindControl("lnkDate") as LinkButton;
             linkButtonDate.Style["color"] = "#a1a1a8";
             linkButtonDate.Style["text-decoration"] = "line-through";
-            linkButtonDate.Enabled = false;
+            linkButtonDate.Style["cursor"] = "not-allowed";
+            linkButtonDate.Style["pointer-events"] = "none";
         }
         protected void lnkDate_Click(object sender, EventArgs e)
         {
@@ -179,7 +182,8 @@ namespace WebApplication
             LinkButton linkButtonFriend = item.FindControl("lnkFriend") as LinkButton;
             linkButtonFriend.Style["color"] = "#a1a1a8";
             linkButtonFriend.Style["text-decoration"] = "line-through";
-            linkButtonFriend.Enabled = false;
+            linkButtonFriend.Style["cursor"] = "not-allowed";
+            linkButtonFriend.Style["pointer-events"] = "none";
         }
         private void FriendRequest(int profileId,int userId)
         {

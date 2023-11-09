@@ -128,7 +128,7 @@
 					<a class="nav-link active" href="Default.aspx" title="Home"> <i class="bi bi-house"></i> <span class="nav-text">Home</span> </a>
 				</li>
 				<li class="nav-item dropdown">
-					<a class="nav-link" href="#" title="my group"> <i class="bi bi-people"></i> <span class="nav-text">Groups</span> </a>
+					<a class="nav-link" href="Requests.aspx" title="Requests"> <i class="bi bi-person-hearts"></i> <span class="nav-text">Requests</span> </a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="#" title="Messages"> 
@@ -136,14 +136,14 @@
 						<i class="bi bi-chat-left"></i> <span class="nav-text">Messages</span>
 					</a>
 				</li>
-				<li class="nav-item">
+				<%--<li class="nav-item">
 					<a class="nav-link" href="#" title="Notifications"> 
 						<div class="badge-notif badge-notif-bottom"></div>
 						<i class="bi bi-bell"></i> <span class="nav-text">Notifications</span>
 					</a>
-				</li>
+				</li>--%>
 				<li class="nav-item">
-					<a class="nav-link" href="#" title="My network"> <i class="bi bi-ui-radios-grid"></i> <span class="nav-text">My network</span> </a>
+					<a class="nav-link" href="#" title="Network"> <i class="bi bi-ui-radios-grid"></i> <span class="nav-text">Network</span> </a>
 				</li>
 			</ul>
 		</div>

@@ -43,7 +43,10 @@
               <asp:Panel ID="pnlPswd" runat="server" Visible="false">
                 <div class="mb-3 position-relative">
                   <div class="input-group input-group-lg">
-                      <asp:TextBox ID="txtPswd" runat="server" class="form-control" placeholder="Enter new password" TextMode="Password" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Include at least one uppercase, one lowercase, one special character, one number and 8 characters long." data-bs-original-title="" title=""></asp:TextBox>
+                      <asp:TextBox ID="txtPswd" runat="server" class="form-control fakepassword" placeholder="Enter new password" TextMode="Password" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Include at least one uppercase, one lowercase, one special character, one number and 8 characters long." data-bs-original-title="" title=""></asp:TextBox>
+                      <span class="input-group-text p-0">
+                      <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px"></i>
+                    </span>
                   </div>
                 </div>
                 <div class="mb-3 input-group-lg">
