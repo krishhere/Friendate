@@ -28,22 +28,34 @@ insert into interest(id,reading,trekking,hiking,singing,dancing,listenMusic,gard
 END $$;
 
 DELIMITER $$;
-Create PROCEDURE Pro_FriendRequests(in p_profileId bigint,p_userId bigint)
+Create PROCEDURE Pro_FriendRequests(in p_profileId bigint,in p_userId bigint)
 BEGIN
 insert into FriendRequest(profileId,userId) values(p_profileId,p_userId);
 END $$;
 
 DELIMITER $$;
-Create PROCEDURE Pro_DateRequests(in p_profileId bigint,p_userId bigint)
+Create PROCEDURE Pro_DateRequests(in p_profileId bigint,in p_userId bigint)
 BEGIN
 insert into DateRequest(profileId,userId) values(p_profileId,p_userId);
 END $$;
 
-SELECT * FROM mySite.users;
-
-SELECT * FROM mySite.interest;
-
-SELECT table_schema, table_name, index_name, column_name FROM information_schema.statistics WHERE non_unique = 1 AND table_schema = "mySite";
+DELIMITER $$;
+Create PROCEDURE Pro_AcceptReject(in p_profileId bigint,in p_userId bigint,in P_acceptReject bigint,in P_type varchar(7))
+BEGIN
+if P_acceptReject=1 then
+	if p_type="Date" then 
+		update mySite.daterequest set accept=1 where profileid=p_profileId and userid=p_userId;
+	else 
+		update mySite.friendrequest set accept=1 where profileid=p_profileId and userid=p_userId;
+	end if;
+else
+	if p_type="Date" then 
+		delete from mySite.daterequest where profileid=p_profileId and userid=p_userId;
+	else 
+		delete from mySite.friendrequest where profileid=p_profileId and userid=p_userId;
+	end if;
+end if;
+END $$;
 
 with cte as(
 SELECT u.id id,Name,gender,city,lookFor,about,image1,IF(i.reading=1,'Reading',NULL) AS reading,IF(i.trekking=1,'Trekking',NULL) AS trekking,IF(i.hiking=1,'Hiking',NULL) AS hiking,IF(i.singing=1,'Singing',NULL) AS singing,IF(i.dancing=1,'Dancing',NULL) AS dancing,IF(i.listenMusic=1,'Music lover',NULL) AS listenMusic,IF(i.gardening=1,'Gardening',NULL) AS gardening,IF(i.cooking=1,'Cooking',NULL) AS cooking,IF(i.gym=1,'Gym',NULL) AS gym,IF(i.foodie=1,'Foodie',NULL) AS foodie,IF(i.travelling=1,'travelling',NULL) AS travelling,IF(i.art=1,'Artist',NULL) AS art,IF(i.photography=1,'Photography',NULL) AS photography,IF(i.teaching=1,'Teaching',NULL) AS teaching,IF(i.technology=1,'Technology',NULL) AS technology,IF(i.coding=1,'Coding',NULL) AS coding,IF(i.petCaring=1,'Pet caring',NULL) AS petCaring,IF(i.outdoorGaming=1,'Outdoor gaming',NULL) AS outdoorGaming,IF(i.indoorGaming=1,'Indoor gaming',NULL) AS indoorGaming,IF(i.fashion=1,'Fashion',NULL) AS fashion,IF(i.nightLife=1,'Night life',NULL) AS nightLife,IF(i.daylife=1,'Day life',NULL) AS daylife,IF(i.investing=1,'Investing',NULL) AS investing,IF(i.business=1,'Business',NULL) AS business 
@@ -52,17 +64,27 @@ INNER JOIN mySite.interest i ON u.id = i.id)
 SELECT id,Name,gender,city,lookFor,about,image1,CONCAT_WS(',', reading,trekking,hiking,singing,dancing,listenMusic,gardening,cooking,gym,foodie,travelling,art,photography,teaching,technology,coding,petCaring,outdoorGaming,indoorGaming,fashion,nightLife,daylife,investing,business) AS interests
 FROM cte order by rand() limit 5;
 
+DELIMITER $$;
+Create PROCEDURE Pro_FriendDateRequests(in p_profileId bigint)
+BEGIN
 SELECT *
 FROM (select * from (with cte as(SELECT u.id id,Name,IF(u.gender=1,'Male','Female') AS gender,(YEAR(curdate())-right(dob,4)) as age,city,about,image1,IF(i.reading=1,'Reading',NULL) AS reading,IF(i.trekking=1,'Trekking',NULL) AS trekking,IF(i.hiking=1,'Hiking',NULL) AS hiking,IF(i.singing=1,'Singing',NULL) AS singing,IF(i.dancing=1,'Dancing',NULL) AS dancing,IF(i.listenMusic=1,'Music lover',NULL) AS listenMusic,IF(i.gardening=1,'Gardening',NULL) AS gardening,IF(i.cooking=1,'Cooking',NULL) AS cooking,IF(i.gym=1,'Gym',NULL) AS gym,IF(i.foodie=1,'Foodie',NULL) AS foodie,IF(i.travelling=1,'travelling',NULL) AS travelling,IF(i.art=1,'Artist',NULL) AS art,IF(i.photography=1,'Photography',NULL) AS photography,IF(i.teaching=1,'Teaching',NULL) AS teaching,IF(i.technology=1,'Technology',NULL) AS technology,IF(i.coding=1,'Coding',NULL) AS coding,IF(i.petCaring=1,'Pet caring',NULL) AS petCaring,IF(i.outdoorGaming=1,'Outdoor gaming',NULL) AS outdoorGaming,IF(i.indoorGaming=1,'Indoor gaming',NULL) AS indoorGaming,IF(i.fashion=1,'Fashion',NULL) AS fashion,IF(i.nightLife=1,'Night life',NULL) AS nightLife,IF(i.daylife=1,'Day life',NULL) AS daylife,IF(i.investing=1,'Investing',NULL) AS investing,IF(i.business=1,'Business',NULL) AS business 
 FROM mySite.users u INNER JOIN mySite.interest i ON u.id = i.id)
 SELECT id as senderId,d.userId as ReceiverId,Name,gender,age,city,about,image1,CONCAT_WS(',', reading,trekking,hiking,singing,dancing,listenMusic,gardening,cooking,gym,foodie,travelling,art,photography,teaching,technology,coding,petCaring,outdoorGaming,indoorGaming,fashion,nightLife,daylife,investing,business) AS interests
-,case WHEN d.userid is not null THEN 'Date' ELSE 'Friend' end as RequestType FROM cte c inner join DateRequest d on c.id=d.profileId) as t1
+,case WHEN d.userid is not null THEN 'Date' ELSE 'Friend' end as RequestType,IF(d.accept=1,'Date Accepted',null)as accept FROM cte c inner join DateRequest d on c.id=d.profileId) as t1
 union
 select * from (with cte2 as(SELECT u.id id,Name,IF(u.gender=1,'Male','Female') AS gender,(YEAR(curdate())-right(dob,4)) as age,city,about,image1,IF(i.reading=1,'Reading',NULL) AS reading,IF(i.trekking=1,'Trekking',NULL) AS trekking,IF(i.hiking=1,'Hiking',NULL) AS hiking,IF(i.singing=1,'Singing',NULL) AS singing,IF(i.dancing=1,'Dancing',NULL) AS dancing,IF(i.listenMusic=1,'Music lover',NULL) AS listenMusic,IF(i.gardening=1,'Gardening',NULL) AS gardening,IF(i.cooking=1,'Cooking',NULL) AS cooking,IF(i.gym=1,'Gym',NULL) AS gym,IF(i.foodie=1,'Foodie',NULL) AS foodie,IF(i.travelling=1,'travelling',NULL) AS travelling,IF(i.art=1,'Artist',NULL) AS art,IF(i.photography=1,'Photography',NULL) AS photography,IF(i.teaching=1,'Teaching',NULL) AS teaching,IF(i.technology=1,'Technology',NULL) AS technology,IF(i.coding=1,'Coding',NULL) AS coding,IF(i.petCaring=1,'Pet caring',NULL) AS petCaring,IF(i.outdoorGaming=1,'Outdoor gaming',NULL) AS outdoorGaming,IF(i.indoorGaming=1,'Indoor gaming',NULL) AS indoorGaming,IF(i.fashion=1,'Fashion',NULL) AS fashion,IF(i.nightLife=1,'Night life',NULL) AS nightLife,IF(i.daylife=1,'Day life',NULL) AS daylife,IF(i.investing=1,'Investing',NULL) AS investing,IF(i.business=1,'Business',NULL) AS business 
 FROM mySite.users u INNER JOIN mySite.interest i ON u.id = i.id)
 SELECT id as senderId,f.userid as ReceiverId,Name,gender,age,city,about,image1,CONCAT_WS(',', reading,trekking,hiking,singing,dancing,listenMusic,gardening,cooking,gym,foodie,travelling,art,photography,teaching,technology,coding,petCaring,outdoorGaming,indoorGaming,fashion,nightLife,daylife,investing,business) AS interests
-,case WHEN f.userid is not null THEN 'Friend' ELSE 'Date' end as RequestType FROM cte2 c2 inner join FriendRequest f on c2.id=f.profileId) as t2 
-) AS combined_result WHERE ReceiverId = 19;
+,case WHEN f.userid is not null THEN 'Friend' ELSE 'Date' end as RequestType,IF(f.accept=1,'Friend Accepted',null)as accept FROM cte2 c2 inner join FriendRequest f on c2.id=f.profileId) as t2) AS result 
+WHERE ReceiverId=p_profileId;
+END $$;
+
+SELECT * FROM mySite.users;
+
+SELECT * FROM mySite.interest;
+
+SELECT table_schema, table_name, index_name, column_name FROM information_schema.statistics WHERE non_unique = 1 AND table_schema = "mySite";
 
 SELECT table_schema AS "Database",ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS "SizeInMB" FROM information_schema.TABLES WHERE table_schema = "mysite" GROUP BY table_schema;
 

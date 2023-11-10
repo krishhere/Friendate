@@ -95,6 +95,8 @@ namespace WebApplication
                     linkButtonFriend.Style["color"] = "#0047ff";
                     LinkButton linkButtonDate = e.Item.FindControl("lnkDate") as LinkButton;
                     linkButtonDate.Style["color"] = "#a1a1a8";
+                    linkButtonDate.Style["cursor"] = "not-allowed";
+                    linkButtonDate.Style["pointer-events"] = "none";
                     linkButtonDate.Style["text-decoration"] = "line-through";
                     linkButtonDate.Style["cursor"] = "not-allowed";
                     linkButtonDate.Style["pointer-events"] = "none";
@@ -107,6 +109,8 @@ namespace WebApplication
                     linkButtonDate.Style["color"] = "red";
                     LinkButton linkButtonFriend = e.Item.FindControl("lnkFriend") as LinkButton;
                     linkButtonFriend.Style["color"] = "#a1a1a8";
+                    linkButtonFriend.Style["cursor"] = "not-allowed";
+                    linkButtonFriend.Style["pointer-events"] = "none";
                     linkButtonFriend.Style["text-decoration"] = "line-through";
                     linkButtonFriend.Style["cursor"] = "not-allowed";
                     linkButtonFriend.Style["pointer-events"] = "none";
@@ -165,6 +169,8 @@ namespace WebApplication
             FriendRequest(profileId,userId);
             LinkButton linkButtonFriend = item.FindControl("lnkFriend") as LinkButton;
             linkButtonFriend.Style["color"] = "#0047ff";
+            linkButtonFriend.Style["cursor"] = "not-allowed";
+            linkButtonFriend.Style["pointer-events"] = "none";
             LinkButton linkButtonDate = item.FindControl("lnkDate") as LinkButton;
             linkButtonDate.Style["color"] = "#a1a1a8";
             linkButtonDate.Style["text-decoration"] = "line-through";
@@ -181,6 +187,8 @@ namespace WebApplication
             linkButtonDate.Style["color"] = "red";
             LinkButton linkButtonFriend = item.FindControl("lnkFriend") as LinkButton;
             linkButtonFriend.Style["color"] = "#a1a1a8";
+            linkButtonFriend.Style["cursor"] = "not-allowed";
+            linkButtonFriend.Style["pointer-events"] = "none";
             linkButtonFriend.Style["text-decoration"] = "line-through";
             linkButtonFriend.Style["cursor"] = "not-allowed";
             linkButtonFriend.Style["pointer-events"] = "none";
