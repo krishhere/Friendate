@@ -122,7 +122,6 @@ namespace WebApplication
                     StoreValueInCookies("salngEmail", email);
                     StoreValueInCookies("salngId", id.ToString());
                     StoreValueInCookies("salngName", name);
-                    Response.Redirect("Default.aspx",false);
                 }
                 else
                 {
@@ -135,28 +134,30 @@ namespace WebApplication
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "alert('Technical issue to save your details.');", true);
             }
-            finally
-            {
-                con.Close();
-            }
+            Response.Redirect("Default.aspx", false);
         }
         private void UserInsert(string email)
         {
             try
             {
                 byte[] bytes;
-                BinaryReader br = new BinaryReader(FileUpload1.PostedFile.InputStream);
-                bytes = br.ReadBytes(FileUpload1.PostedFile.ContentLength);
+                //BinaryReader br = new BinaryReader(FileUpload1.PostedFile.InputStream);
+                //bytes = br.ReadBytes(FileUpload1.PostedFile.ContentLength);
 
-                using (MagickImage image = new MagickImage(bytes))
+                string base64ImageData = hdnCroppedImageData.Value.Split(',')[1];
+                byte[] imageBytes = Convert.FromBase64String(base64ImageData);
+                int x = 300;
+                int y = 300;
+                using (MagickImage image = new MagickImage(imageBytes))
                 {
                     image.Format = image.Format;
-                    image.Resize(540, 540);
-                    image.Quality = 80;
+                    image.Resize(x, y);
+                    image.Quality = 100;
                     var memStream = new MemoryStream();
                     image.Write(memStream);   //image.Write(@"C:\Users\krish\OneDrive\Desktop\lowSize\YourFinalImage.jpg");
                     bytes = image.ToByteArray();
                 }
+
                 decimal size = Convert.ToInt32(bytes.Length);
                 size = Convert.ToDecimal(Math.Round(size / 1024) / 1024);
                 if (size > 1)

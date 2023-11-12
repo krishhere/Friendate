@@ -22,8 +22,8 @@
                   <div class="col-sm-6 col-xl-4">
                     <div class="card h-100" style="padding:5px;">
                       <div class="position-relative">
-                          <asp:Image ID="imgSenderPost" runat="server" class="img-fluid rounded-top" style="Width:fit-content;" />
-                        <div class="badge mt-2 me-2 position-absolute top-0 end-0">
+                          <asp:Image ID="imgSenderPost" runat="server" class="img-fluid rounded-top" style="height:300px;text-align:center;" />
+                        <div class="badge mt-1 me-1 position-absolute bottom-0 end-0">
                           <asp:Label ID="lblRequestedFor" runat="server" Text='<%# Eval("RequestType") %>' CssClass="badge bg-danger text-white"></asp:Label>
                         </div>
                       </div>

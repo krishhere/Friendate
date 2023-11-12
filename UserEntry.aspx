@@ -20,8 +20,8 @@
         });
     </script>
     
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script type="text/javascript">
+    <%--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>--%>
+	<%--<script type="text/javascript">
         $(document).ready(() => {
             $('#FileUpload1').change(function () {
                 const file = this.files[0];
@@ -36,18 +36,30 @@
                 }
             });
         });
+    </script>--%>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Hide the loading message initially
+            $("#loadingMessage").hide();
+        });
+        function showLoadingMessage() {
+            // Show the loading message when the button is clicked
+            $("#loadingMessage").show();
+        }
     </script>
 </head>
 <body>
 <form id="form1" runat="server">
 <main>
   <div class="container">
-    <asp:Panel ID="pnlUserDetails" runat="server">
     <div class="row g-4" style="padding-top:10px;">
       <div class="col-md-8 col-lg-6 vstack gap-4">
         <div class="card">
           <div class="card-header border-0 pb-0">
-            <h1 class="h4 card-title mb-0">step 1 of <span style="color:gray;">2</span></h1>
+            <h1 class="h4 card-title mb-0 text-center"><span style="color:gray;">We need your </span>attention</h1>
           </div>
           <div class="card-body">
             <div class="row g-3">
@@ -78,28 +90,19 @@
                       <asp:ListItem Value="Date">Date</asp:ListItem>
                   </asp:DropDownList>
               </div>
-              <div class="col-sm-8 col-lg-8">
+              <div class="col-md-6 col-lg-6">
                 <label class="form-label">About you (Character limit: 10 - 300) (Required)</label>
                   <asp:TextBox ID="txtAbout" runat="server" class="form-control" rows="3" TextMode="MultiLine" placeholder="Example: I am a techie"></asp:TextBox>
               </div>
-              <div class="col-12 text-end">
-                <button type="submit" class="btn btn-primary mb-0">Next</button>
+              <div class="col-md-6 col-lg-6">
+                <label class="form-label">Upload your pic (Required)</label><br />
+                  <asp:FileUpload ID="FileUpload1" runat="server" /><br />
+						<%--<asp:Image ID="imgPreview" Height="260px" runat="server" />--%>
+                  <img id="imgCrop" runat="server" style="width: 300px;Height:300px" /><br />
+                  <button type="button" id="btnCrop" class="btn btn-primary mb-0">Crop Image</button>
+                    <br />
+                   <input type="hidden" id="hdnCroppedImageData" runat="server" />
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </asp:Panel>
-    <asp:Panel ID="pnlUserInterests" runat="server">
-    <div class="row g-4" style="padding-top:10px;">
-      <div class="col-md-8 col-lg-6 vstack gap-4">
-        <div class="card">
-          <div class="card-header border-0 pb-0">
-            <h1 class="h4 card-title mb-0">step 2 of 2</h1>
-          </div>
-          <div class="card-body">
-            <div class="row g-3">
               <div class="col-md-6 col-lg-6">
                 <label class="form-label">Select your interests (atleast 3) (Required)</label>
                  <asp:ListBox ID="multiSelectListBox" runat="server" SelectionMode="Multiple" class="form-select js-choice" data-search-enabled="true">
@@ -129,13 +132,8 @@
                     <asp:ListItem Text="business" Value="business" />
                 </asp:ListBox>
               </div>
-              <div class="col-md-6 col-lg-6">
-                <label class="form-label">Upload your pic (Required)</label><br />
-                  <asp:FileUpload ID="FileUpload1" runat="server" /><br />
-						<asp:Image ID="imgPreview" Height="260px" runat="server" />
-              </div>
               <div class="col-12 text-end">
-                    <asp:Button ID="BtnSubmit" runat="server" Text="Go ahead" class="btn btn-primary mb-0" OnClick="BtnSubmit_Click" />
+                    <asp:Button ID="BtnSubmit" runat="server" Text="Go ahead" Enabled="false" OnClick="BtnSubmit_Click"  OnClientClick="showLoadingMessage();" class="btn btn-primary mb-0" />
               </div>
               <div class="col-12 text-end">
                   <asp:Label ID="lblMsg" runat="server" Text="" Visible="false" ForeColor="Red" Font-Bold="true"></asp:Label>
@@ -145,12 +143,39 @@
         </div>
       </div>
     </div>
-    </asp:Panel>
+    
   </div>
 </main>
 <script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/vendor/choices.js/public/assets/scripts/choices.min.js"></script>
 <script src="assets/js/functions.js"></script>
+    <script>
+        $(document).ready(function () {
+            var $image = $("#imgCrop");
+            var $input = $("#FileUpload1");
+            $image.cropper({
+                aspectRatio: 1,
+                viewMode: 1,
+            });
+            $("#FileUpload1").change(function () {
+                var fileInput = this;
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $image.cropper("replace", e.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            });
+            // Handle crop button click
+            $("#btnCrop").click(function () {
+                var croppedCanvas = $image.cropper("getCroppedCanvas");
+                var croppedImage = croppedCanvas.toDataURL("image/jpg");
+                $image.cropper("destroy");
+                $image.attr("src", croppedImage);
+                $("#hdnCroppedImageData").val(croppedImage);
+                document.getElementById('<%= BtnSubmit.ClientID %>').disabled = false;
+            });
+        });
+    </script>
 </form>
 </body>
 </html>

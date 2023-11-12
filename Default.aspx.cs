@@ -36,84 +36,98 @@ namespace WebApplication
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-                Image imgPost = e.Item.FindControl("imgUserPost") as Image;
-                DataRowView drimg = (DataRowView)e.Item.DataItem;
-                if (!Convert.IsDBNull(drimg["image1"]))
+                try
                 {
-                    imgPost.ImageUrl = "data:image/jpg;base64," + Convert.ToBase64String((byte[])drimg["image1"]);
-                }
-
-                Label LookFor = e.Item.FindControl("lblLookFor") as Label;
-                DataRowView dr = (DataRowView)e.Item.DataItem;
-                string value = "Looking for ";
-                if (!Convert.IsDBNull(dr["lookFor"]))
-                {
-                    HtmlGenericControl liLnkFriendItem = (HtmlGenericControl)e.Item.FindControl("liLnkFriend");
-                    HtmlGenericControl liLnkDateItem = (HtmlGenericControl)e.Item.FindControl("liLnkDate");
-                    int i = Convert.ToInt32(dr["lookFor"].ToString());
-                    LinkButton lbFriend = e.Item.FindControl("lnkFriend") as LinkButton;
-                    LinkButton lbDate = e.Item.FindControl("lnkDate") as LinkButton;
-                    if (i == 0)
+                    Image imgPost = e.Item.FindControl("imgUserPost") as Image;
+                    DataRowView drimg = (DataRowView)e.Item.DataItem;
+                    if (!Convert.IsDBNull(drimg["image1"]))
                     {
-                        value = value + "friend";
-                        lbFriend.Visible = true;
-                        lbDate.Visible = false;
+                        imgPost.ImageUrl = "data:image/jpg;base64," + Convert.ToBase64String((byte[])drimg["image1"]);
                     }
-                    else if (i==1)
+
+                    Label LookFor = e.Item.FindControl("lblLookFor") as Label;
+                    DataRowView dr = (DataRowView)e.Item.DataItem;
+                    string value = "Looking for ";
+                    if (!Convert.IsDBNull(dr["lookFor"]))
                     {
-                        value = value + "date";
-                        lbDate.Visible = true;
-                        lbFriend.Visible = false;
+                        HtmlGenericControl liLnkFriendItem = (HtmlGenericControl)e.Item.FindControl("liLnkFriend");
+                        HtmlGenericControl liLnkDateItem = (HtmlGenericControl)e.Item.FindControl("liLnkDate");
+                        int i = Convert.ToInt32(dr["lookFor"].ToString());
+                        LinkButton lbFriend = e.Item.FindControl("lnkFriend") as LinkButton;
+                        LinkButton lbDate = e.Item.FindControl("lnkDate") as LinkButton;
+                        if (i == 0)
+                        {
+                            value = value + "friend";
+                            lbFriend.Visible = true;
+                            lbDate.Visible = false;
+                        }
+                        else if (i == 1)
+                        {
+                            value = value + "date";
+                            lbDate.Visible = true;
+                            lbFriend.Visible = false;
+                        }
+                        else
+                        {
+                            value = value + "friend or date";
+                            lbFriend.Visible = true;
+                            lbDate.Visible = true;
+                        }
+                        LookFor.Text = value;
                     }
                     else
                     {
-                        value = value + "friend or date";
-                        lbFriend.Visible = true;
-                        lbDate.Visible = true;
+                        LookFor.Text = value + "fun";
                     }
-                    LookFor.Text = value;
-                }
-                else
-                {
-                    LookFor.Text = value + "fun";
-                }
 
-                Repeater rptInterest = e.Item.FindControl("rptUserInterests") as Repeater;
-                DataRowView drInterest = (DataRowView)e.Item.DataItem;
-                string strInterests = drInterest["interests"].ToString();
-                arryInterests = strInterests.Split(',');
-                rptInterest.DataSource = arryInterests;
-                rptInterest.DataBind();
+                    Repeater rptInterest = e.Item.FindControl("rptUserInterests") as Repeater;
+                    DataRowView drInterest = (DataRowView)e.Item.DataItem;
+                    string strInterests = drInterest["interests"].ToString();
+                    arryInterests = strInterests.Split(',');
+                    rptInterest.DataSource = arryInterests;
+                    rptInterest.DataBind();
 
-                int profileId = Convert.ToInt32(HttpContext.Current.Request.Cookies["salngId"].Value);
-                int userId = Convert.ToInt32((e.Item.FindControl("lblId") as Label).Text);
-                string queryFriend = $"select * from FriendRequest where profileid={profileId} and userId={userId}";
-                bool flag = IsRequest(queryFriend);
-                if (flag == true)
-                {
-                    LinkButton linkButtonFriend = e.Item.FindControl("lnkFriend") as LinkButton;
-                    linkButtonFriend.Style["color"] = "#0047ff";
-                    LinkButton linkButtonDate = e.Item.FindControl("lnkDate") as LinkButton;
-                    linkButtonDate.Style["color"] = "#a1a1a8";
-                    linkButtonDate.Style["cursor"] = "not-allowed";
-                    linkButtonDate.Style["pointer-events"] = "none";
-                    linkButtonDate.Style["text-decoration"] = "line-through";
-                    linkButtonDate.Style["cursor"] = "not-allowed";
-                    linkButtonDate.Style["pointer-events"] = "none";
+                    int profileId = Convert.ToInt32(HttpContext.Current.Request.Cookies["salngId"].Value);
+                    int userId = Convert.ToInt32((e.Item.FindControl("lblId") as Label).Text);
+                    string queryFriend = $"select * from FriendRequest where profileid={profileId} and userId={userId}";
+                    bool flag = IsRequest(queryFriend);
+                    if (flag == true)
+                    {
+                        LinkButton linkButtonFriend = e.Item.FindControl("lnkFriend") as LinkButton;
+                        linkButtonFriend.Style["color"] = "#0047ff";
+                        LinkButton linkButtonDate = e.Item.FindControl("lnkDate") as LinkButton;
+                        linkButtonDate.Style["color"] = "#a1a1a8";
+                        linkButtonDate.Style["cursor"] = "not-allowed";
+                        linkButtonDate.Style["pointer-events"] = "none";
+                        linkButtonDate.Style["text-decoration"] = "line-through";
+                        linkButtonDate.Style["cursor"] = "not-allowed";
+                        linkButtonDate.Style["pointer-events"] = "none";
+                    }
+                    string queryDate = $"select * from DateRequest where profileid={profileId} and userId={userId}";
+                    bool flag1 = IsRequest(queryDate);
+                    if (flag1 == true)
+                    {
+                        LinkButton linkButtonDate = e.Item.FindControl("lnkDate") as LinkButton;
+                        linkButtonDate.Style["color"] = "red";
+                        LinkButton linkButtonFriend = e.Item.FindControl("lnkFriend") as LinkButton;
+                        linkButtonFriend.Style["color"] = "#a1a1a8";
+                        linkButtonFriend.Style["cursor"] = "not-allowed";
+                        linkButtonFriend.Style["pointer-events"] = "none";
+                        linkButtonFriend.Style["text-decoration"] = "line-through";
+                        linkButtonFriend.Style["cursor"] = "not-allowed";
+                        linkButtonFriend.Style["pointer-events"] = "none";
+                    }
                 }
-                string queryDate = $"select * from DateRequest where profileid={profileId} and userId={userId}";
-                bool flag1 = IsRequest(queryDate);
-                if (flag1 == true)
+                catch(Exception ex)
                 {
-                    LinkButton linkButtonDate = e.Item.FindControl("lnkDate") as LinkButton;
-                    linkButtonDate.Style["color"] = "red";
-                    LinkButton linkButtonFriend = e.Item.FindControl("lnkFriend") as LinkButton;
-                    linkButtonFriend.Style["color"] = "#a1a1a8";
-                    linkButtonFriend.Style["cursor"] = "not-allowed";
-                    linkButtonFriend.Style["pointer-events"] = "none";
-                    linkButtonFriend.Style["text-decoration"] = "line-through";
-                    linkButtonFriend.Style["cursor"] = "not-allowed";
-                    linkButtonFriend.Style["pointer-events"] = "none";
+                    string hghj = ex.Message;
+                    if(ex.Message== "Object reference not set to an instance of an object.")
+                    {
+                        RemoveValueInCookies("salngEmail");
+                        RemoveValueInCookies("salngName");
+                        RemoveValueInCookies("salngId");
+                        Response.Redirect("Login.aspx");
+                    }
                 }
             }
         }
@@ -294,6 +308,12 @@ namespace WebApplication
             Random random = new Random();
             num = random.Next(1, maxCount);
             return num;
+        }
+        private void RemoveValueInCookies(string key)
+        {
+            HttpCookie cookie = new HttpCookie(key);
+            cookie.Expires = DateTime.Now.AddYears(-1);
+            HttpContext.Current.Response.Cookies.Add(cookie);
         }
     }
 }
