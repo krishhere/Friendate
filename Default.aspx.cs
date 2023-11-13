@@ -21,9 +21,15 @@ namespace WebApplication
         protected void Page_Load(object sender, EventArgs e)
         {
             maxCount = MaxRecord();
+            if (maxCount == 0)
+            {
+                RemoveValueInCookies("salngEmail");
+                RemoveValueInCookies("salngName");
+                RemoveValueInCookies("salngId");
+                Response.Redirect("Login.aspx");
+            }
             if (!Page.IsPostBack)
             {
-                maxCount = MaxRecord();
                 Data data = new Data();
                 DataTable dt = data.GetRandomDataRecords(5);
                 Session["DataTable"] = dt;

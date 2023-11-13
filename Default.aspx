@@ -72,7 +72,7 @@
                 <div class="swiper sample-slider">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide" style="text-align:center;">
-                            <asp:Image ID="imgUserPost" runat="server" class="card-img" AlternateText="Image" style="Width:fit-content;" />
+                            <asp:Image ID="imgUserPost" runat="server" class="card-img" AlternateText="Image" style="Width:-webkit-fill-available;" />
                         </div>
                         <div class="swiper-slide">
 			                <span class="list-inline mb-0 d-flex flex-wrap gap-2" style="padding: 2% 4% 0 10%;height: 100px;overflow: overlay;border-bottom:1px solid;">

@@ -141,8 +141,15 @@ namespace WebApplication
                 con.Open();
                 cmd2.ExecuteNonQuery();
                 BindData();
-                pnlAcceptReject.Visible = false;
-                pnlMsg.Visible = true;
+                if (acceptReject != 0)
+                {
+                    pnlAcceptReject.Visible = false;
+                    pnlMsg.Visible = true;
+                }
+                else
+                {
+                    Response.Redirect("Request.aspx");
+                }
             }
             catch (Exception ex)
             {
