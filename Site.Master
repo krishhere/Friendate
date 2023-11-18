@@ -7,6 +7,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="author" content="">
 	<meta name="description" content="">
+	<style type="text/css">
+		body::-webkit-scrollbar {
+  display: none;
+}
+	</style>
 	<script>
         $(document).ready(function () {
             window.history.replaceState('', '', window.location.href)
@@ -160,9 +165,7 @@
 		<li class="px-3">
 			<div class="d-flex align-items-center position-relative">
 			</div>
-			<a class="dropdown-item btn btn-primary-soft btn-sm my-2 text-center" href="my-profile.html">
-				<asp:Label ID="lblProfileName" runat="server" Text="" Font-Bold="true" Font-Size="16px"></asp:Label>
-			</a>
+			<asp:LinkButton ID="lbProfile" runat="server" class="dropdown-item btn btn-primary-soft btn-sm my-2 text-center" OnClick="lbProfile_Click"><asp:Label ID="lblProfileName" runat="server" Text="" Font-Bold="true" Font-Size="16px"></asp:Label></asp:LinkButton>
 		</li>
 		<li><a class="dropdown-item" href="settings.html"><i class="bi bi-gear fa-fw me-2"></i>Settings & Privacy</a></li>
 		<li> 

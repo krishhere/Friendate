@@ -12,17 +12,21 @@ namespace WebApplication
         MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["dbConnectionString"].ConnectionString);
         string cookieName = "salngName";
         string cookieEmail = "salngEmail";
+        string cookieId= "salngId";
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                if (HttpContext.Current.Request.Cookies[cookieEmail] != null)
+                if (HttpContext.Current.Request.Cookies[cookieName] != null && HttpContext.Current.Request.Cookies[cookieEmail] != null && HttpContext.Current.Request.Cookies[cookieId] != null)
                 {
                     string mail = HttpContext.Current.Request.Cookies["salngEmail"].Value;
                     BindUser(mail);
                 }
                 else
                 {
+                    RemoveValueInCookies("salngEmail");
+                    RemoveValueInCookies("salngName");
+                    RemoveValueInCookies("salngId");
                     Response.Redirect("Login.aspx");
                 }
             }
@@ -36,18 +40,26 @@ namespace WebApplication
                 MySqlDataReader dr = null;
                 MySqlCommand cmd = con.CreateCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "SELECT * FROM mySite.users where email='" + emailId + "'";
+                cmd.CommandText = "SELECT id,name,email,image1 FROM mySite.users where email='" + emailId + "'";
                 dr = cmd.ExecuteReader();
-                while (dr.Read())
+                if (dr.Read())
                 {
                     lblProfileName.Text = dr["Name"].ToString();
                     ImgProfile.ImageUrl = "data:image/jpg;base64," + Convert.ToBase64String((byte[])dr["image1"]);
-                    break;
+                }
+                else {
+                    RemoveValueInCookies("salngEmail");
+                    RemoveValueInCookies("salngName");
+                    RemoveValueInCookies("salngId"); 
+                    Response.Redirect("Login.aspx"); 
                 }
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "alert('Technical issues. please try later');", true);
+                RemoveValueInCookies("salngEmail");
+                RemoveValueInCookies("salngName");
+                RemoveValueInCookies("salngId");
+                Response.Redirect("Login.aspx");
             }
             finally
             {
@@ -67,6 +79,12 @@ namespace WebApplication
             HttpCookie cookie = new HttpCookie(key);
             cookie.Expires = DateTime.Now.AddYears(-1);
             HttpContext.Current.Response.Cookies.Add(cookie);
+        }
+
+        protected void lbProfile_Click(object sender, EventArgs e)
+        {
+            Session["edit"] = "EditProfile";
+            Response.Redirect("UserEntry");
         }
     }
 }

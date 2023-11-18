@@ -24,9 +24,9 @@ namespace WebApplication
             {
                 string cookieName = "salngName";
                 string cookieEmail = "salngEmail";
-                if (HttpContext.Current.Request.Cookies[cookieEmail] != null)
+                string cookieId = "salngId";
+                if (HttpContext.Current.Request.Cookies[cookieName] != null && HttpContext.Current.Request.Cookies[cookieEmail] != null && HttpContext.Current.Request.Cookies[cookieId] != null)
                 {
-                    string email = HttpContext.Current.Request.Cookies[cookieEmail].Value;
                     Response.Redirect("Default.aspx");
                 }
             }
@@ -39,12 +39,13 @@ namespace WebApplication
         protected void btnLogin_Click(object sender, EventArgs e)
         {
             List<string> lstUserDetails = VerifyUser();
-            if (lstUserDetails.Count==2)
+            if (lstUserDetails[2].ToString().ToLower() == "false")
             {
-                StoreValueInCookies("salngEmail", txtEmail.Text.Trim());
-                StoreValueInCookies("salngId", lstUserDetails[0].ToString());
-                StoreValueInCookies("salngName", lstUserDetails[1].ToString());
                 Response.Redirect("Default.aspx");
+            }
+            else if(lstUserDetails[2].ToString().ToLower()=="true")
+            {
+                Response.Redirect("UserEntry.aspx");
             }
         }
         protected List<string> VerifyUser()
@@ -56,13 +57,18 @@ namespace WebApplication
                 MySqlDataReader dr = null;
                 MySqlCommand cmd = con.CreateCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = $"SELECT id,Name FROM mySite.users where Email='{txtEmail.Text.Trim()}' and password='{txtPswd.Text.Trim()}'";
+                cmd.CommandText = $"SELECT id,Name,image1 FROM mySite.users where Email='{txtEmail.Text.Trim()}' and password='{txtPswd.Text.Trim()}'";
                 dr = cmd.ExecuteReader();
-                while (dr.Read())
+                if (dr.Read())
                 {
                     names.Add(dr["id"].ToString());
                     names.Add(dr["Name"].ToString());
-                    break;
+                    bool isImageNull = Convert.IsDBNull(dr["image1"]);
+                    names.Add(isImageNull.ToString());
+
+                    StoreValueInCookies("salngEmail", txtEmail.Text.Trim());
+                    StoreValueInCookies("salngId", dr["id"].ToString());
+                    StoreValueInCookies("salngName", dr["Name"].ToString());
                 }
             }
             catch (Exception ex)

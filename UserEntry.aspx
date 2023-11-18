@@ -79,13 +79,13 @@
                 <label class="form-label">Gender (required)</label>
                   <asp:DropDownList ID="ddlGen" runat="server" class="form-select js-choice">
                       <asp:ListItem Value="male">Male</asp:ListItem>
-                      <asp:ListItem Value="Female">Female</asp:ListItem>
+                      <asp:ListItem Value="female">Female</asp:ListItem>
                   </asp:DropDownList>
               </div>
               <div class="col-sm-6 col-lg-2">
                 <label class="form-label">Looking for (required)</label>
                   <asp:DropDownList ID="ddlLookingFor" runat="server" class="form-select js-choice" >
-                      <asp:ListItem Value="Both">Both</asp:ListItem>
+                      <asp:ListItem Value="Both">Friend / Date</asp:ListItem>
                       <asp:ListItem Value="Friend">Friend</asp:ListItem>
                       <asp:ListItem Value="Date">Date</asp:ListItem>
                   </asp:DropDownList>

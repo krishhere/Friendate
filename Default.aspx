@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="WebApplication.Default" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <%--srolling css and java files--%>
+    <%--srolling css and javascript files--%>
 	<link rel="stylesheet" type="text/css" href="assets/css/SwipeBundle.css">
 	<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
 </asp:Content>
@@ -111,7 +111,9 @@
                   </script>
 
                   <div class="nav nav-pills nav-pills-light nav-fill nav-stack small border-top my-top">
-                    <asp:LinkButton ID="lnkFriend" runat="server" Text="<i class='bi bi-heart pe-1'></i> Friend" OnClick="lnkFriend_Click" class="nav-link mb-0" style="float:left;" Font-Bold="true" />
+                    <asp:LinkButton ID="lnkFriend" runat="server" OnClick="lnkFriend_Click" Font-Bold="true" class="nav-link mb-0">
+                            <asp:Image ID="Image1" runat="server" ImageUrl="~/assets/images/friend.png" Width="15px" /> Friend
+                    </asp:LinkButton> 
                     <asp:LinkButton ID="lnkDate" runat="server" Text="<i class='bi bi-heart pe-1'></i> Date" OnClick="lnkDate_Click" class="nav-link mb-0" style="float:left;" Font-Bold="true" />
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link mb-0" id="cardShareAction" data-bs-toggle="dropdown" aria-expanded="false">

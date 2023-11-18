@@ -41,13 +41,14 @@ namespace WebApplication
                 }
                 if (HttpContext.Current.Request.Cookies[cookieName] != null && HttpContext.Current.Request.Cookies[cookieEmail] != null)
                 {
-                    int id = BindUserId(HttpContext.Current.Request.Cookies[cookieEmail].Value);
-                    if (id!=0)
-                    {
-                        Response.Redirect("Default.aspx");
-                    }
-                    name = HttpContext.Current.Request.Cookies[cookieName].Value;
-                    txtName.Text = name;
+                    Tuple<int,bool> id = BindUserId(HttpContext.Current.Request.Cookies[cookieEmail].Value);
+                }
+                else
+                {
+                    RemoveValueInCookies("salngEmail");
+                    RemoveValueInCookies("salngName");
+                    RemoveValueInCookies("salngId");
+                    Response.Redirect("Login.aspx");
                 }
                 if (city == null)
                 {
@@ -114,14 +115,11 @@ namespace WebApplication
                 string imgType = FileUpload1.PostedFile.ContentType.ToString();
                 if (txtDob.Text.Trim() != "" && txtAbout.Text.Trim() != "" && imgType.Contains("jpeg"))
                 {
-                    email = HttpContext.Current.Request.Cookies[cookieEmail].Value;
-                    UserInsert(email);
-                    int id = BindUserId(email);
+                    int id = Convert.ToInt32(HttpContext.Current.Request.Cookies["salngId"].Value);
+                    UserInsert(id);
                     Thread.Sleep(1000);
                     UploadInterests(id);
-                    StoreValueInCookies("salngEmail", email);
-                    StoreValueInCookies("salngId", id.ToString());
-                    StoreValueInCookies("salngName", name);
+                    Response.Redirect("Default.aspx", false);
                 }
                 else
                 {
@@ -134,9 +132,8 @@ namespace WebApplication
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "alert('Technical issue to save your details.');", true);
             }
-            Response.Redirect("Default.aspx", false);
         }
-        private void UserInsert(string email)
+        private void UserInsert(int id)
         {
             try
             {
@@ -168,44 +165,40 @@ namespace WebApplication
                     return;
                 }
 
-                MySqlParameter[] msp = new MySqlParameter[9];
-                msp[0] = new MySqlParameter("p_Name", MySqlDbType.VarChar);
-                msp[1] = new MySqlParameter("p_Email", MySqlDbType.VarChar);
-                msp[2] = new MySqlParameter("p_Password", MySqlDbType.VarChar);
-                msp[3] = new MySqlParameter("p_city", MySqlDbType.VarChar);
-                msp[4] = new MySqlParameter("p_dob", MySqlDbType.VarChar);
-                msp[5] = new MySqlParameter("p_gender", MySqlDbType.Int16);
-                msp[6] = new MySqlParameter("p_lookFor", MySqlDbType.Int16);
-                msp[7] = new MySqlParameter("p_about", MySqlDbType.VarChar);
-                msp[8] = new MySqlParameter("p_image1", MySqlDbType.MediumBlob);
+                MySqlParameter[] msp = new MySqlParameter[7];
+                msp[0] = new MySqlParameter("p_city", MySqlDbType.VarChar);
+                msp[1] = new MySqlParameter("p_dob", MySqlDbType.VarChar);
+                msp[2] = new MySqlParameter("p_gender", MySqlDbType.Int16);
+                msp[3] = new MySqlParameter("p_lookFor", MySqlDbType.Int16);
+                msp[4] = new MySqlParameter("p_about", MySqlDbType.VarChar);
+                msp[5] = new MySqlParameter("p_image1", MySqlDbType.MediumBlob);
+                msp[6] = new MySqlParameter("p_id", MySqlDbType.Int64);
 
-                msp[0].Value = txtName.Text.Trim();
-                msp[1].Value = email;
-                msp[2].Value = Session["password"].ToString();
-                msp[3].Value = txtCity.Text.Trim();
-                msp[4].Value = txtDob.Text.Trim();
-                if (ddlGen.SelectedValue == "Female")
+                msp[0].Value = txtCity.Text.Trim();
+                msp[1].Value = txtDob.Text.Trim();
+                if (ddlGen.SelectedValue == "female")
                 {
-                    msp[5].Value = 0;
+                    msp[2].Value = 0;
                 }
                 else
                 {
-                    msp[5].Value = 1;
+                    msp[2].Value = 1;
                 }
                 if (ddlLookingFor.SelectedValue == "Friend")
                 {
-                    msp[6].Value = 0;
+                    msp[3].Value = 0;
                 }
                 else if (ddlLookingFor.SelectedValue == "Date")
                 {
-                    msp[6].Value = 1;
+                    msp[3].Value = 1;
                 }
                 else
                 {
-                    msp[6].Value = 2;
+                    msp[3].Value = 2;
                 }
-                msp[7].Value = txtAbout.Text.Trim();
-                msp[8].Value = bytes;
+                msp[4].Value = txtAbout.Text.Trim();
+                msp[5].Value = bytes;
+                msp[6].Value = id;
 
                 MySqlCommand cmd2 = new MySqlCommand();
                 cmd2.Connection = con;
@@ -226,21 +219,52 @@ namespace WebApplication
                 con.Close();
             }
         }
-        protected int BindUserId(string emailId)
+        protected Tuple<int,bool> BindUserId(string emailId)
         {
-            int id=0;
+            Tuple<int, bool> tuple =null;
             try
             {
                 con.Open();
                 MySqlDataReader dr=null;
                 MySqlCommand cmd = con.CreateCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "SELECT id FROM mySite.users where email='"+ emailId + "'";
+                cmd.CommandText = "SELECT id,Name,city,dob,gender,lookFor,about,image1 FROM mySite.users where email='"+ emailId + "'";
                 dr = cmd.ExecuteReader();
-                while (dr.Read())
+                if (dr.Read())
                 {
-                    id = Convert.ToInt32(dr["id"]);
-                    break;
+                    int id= Convert.ToInt32(dr["id"]);
+                    txtName.Text = dr["Name"]?.ToString();
+                    txtCity.Text = dr["city"]?.ToString();
+                    txtDob.Text = dr["dob"]?.ToString();
+                    string gender = dr["gender"]?.ToString();
+                    if (gender == "1")
+                    {
+                        ddlGen.Items.FindByValue("male").Selected = true;
+                    }
+                    else
+                    {
+                        ddlGen.Items.FindByValue("female").Selected = true;
+                    }
+                    string lookforValue = dr["lookfor"]?.ToString();
+                    if (lookforValue == "0")
+                    {
+                        ddlLookingFor.Items.FindByValue("Friend").Selected = true;
+                    }
+                    else if(lookforValue == "1")
+                    {
+                        ddlLookingFor.Items.FindByValue("Date").Selected = true;
+                    }
+                    else
+                    {
+                        ddlLookingFor.Items.FindByValue("Both").Selected = true;
+                    }
+                    txtAbout.Text = dr["about"]?.ToString();
+                    bool isImage= Convert.IsDBNull(dr["image1"]);
+                    if (isImage==false)
+                    {
+                        imgCrop.Src = "data:image/jpg;base64," + Convert.ToBase64String((byte[])dr["image1"]);
+                    }
+                    tuple = new Tuple<int, bool>(id, isImage);
                 }
             }
             catch (Exception ex)
@@ -251,7 +275,7 @@ namespace WebApplication
             {
                 con.Close();
             }
-            return id;
+            return tuple;
         }
         private void UploadInterests(int id)
         {
@@ -472,6 +496,12 @@ namespace WebApplication
             cookie.Expires = DateTime.Now.AddYears(1);
             HttpContext.Current.Response.Cookies.Add(cookie);
         }
+        private void RemoveValueInCookies(string key)
+        {
+            HttpCookie cookie = new HttpCookie(key);
+            cookie.Expires = DateTime.Now.AddYears(-1);
+            HttpContext.Current.Response.Cookies.Add(cookie);
+        }
         private string GetLocation()
         {
             string loc = "";
@@ -501,6 +531,10 @@ namespace WebApplication
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
             return loc;
+        }
+        private void updateUserDetails()
+        {
+
         }
     }
     public class Tokenclass

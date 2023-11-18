@@ -3,15 +3,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Sign up</title>
-    <meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="author" content="">
-	<meta name="description" content="">
-	<link rel="shortcut icon" href="assets/images/favicon.ico">
-	<link rel="preconnect" href="https://fonts.googleapis.com/">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap">
-	<link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css">
-	<link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap-icons/bootstrap-icons.css">
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+	<meta name="author" content=""/>
+	<meta name="description" content=""/>
+	<link rel="shortcut icon" href="assets/images/favicon.ico"/>
+	<link rel="preconnect" href="https://fonts.googleapis.com/"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"/>
+	<link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css"/>
+	<link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap-icons/bootstrap-icons.css"/>
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css" />
 </head>
 <body>
@@ -27,7 +27,8 @@
           <div class="mt-4">
               <asp:Panel ID="pnlMail" runat="server">
                 <div class="mb-3 input-group-lg">
-                    <asp:TextBox ID="txtEmail" runat="server" class="form-control" placeholder="Enter email"></asp:TextBox>
+                    <asp:TextBox ID="txtName" runat="server" CssClass="form-control" placeholder="Enter Name"></asp:TextBox><br />
+                    <asp:TextBox ID="txtEmail" runat="server" class="form-control" placeholder="Enter email"></asp:TextBox><br />
                   <%--<small>We'll never share your email with anyone else.</small>--%>
                   <div class="d-grid">
                       <asp:Button ID="btnMailConfirm" runat="server" Text="Confirm" class="btn btn-lg btn-primary" OnClick="btnMailConfirm_Click" />
@@ -43,14 +44,14 @@
               <asp:Panel ID="pnlPswd" runat="server" Visible="false">
                 <div class="mb-3 position-relative">
                   <div class="input-group input-group-lg">
-                      <asp:TextBox ID="txtPswd" runat="server" class="form-control fakepassword" placeholder="Enter new password" TextMode="Password" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Include at least one uppercase, one lowercase, one special character, one number and 8 characters long." data-bs-original-title="" title=""></asp:TextBox>
+                      <asp:TextBox ID="txtPswd" runat="server" class="form-control fakepassword" placeholder="Enter new password" TextMode="Password" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Include at least one uppercase, one lowercase, one special character, one number and 8 characters long." data-bs-original-title="" title="" MaxLength="12"></asp:TextBox>
                       <span class="input-group-text p-0">
                       <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px"></i>
                     </span>
                   </div>
                 </div>
                 <div class="mb-3 input-group-lg">
-                    <asp:TextBox ID="txtConPswd" runat="server" placeholder="Confirm password" class="form-control" TextMode="Password"></asp:TextBox>
+                    <asp:TextBox ID="txtConPswd" runat="server" placeholder="Confirm password" class="form-control" TextMode="Password" MaxLength="12"></asp:TextBox>
                 </div>
                 <div class="mb-3 text-start">
                     <span class="d-block" style="text-align:right;">Already have an account? <a href="Login.aspx">Sign in here</a></span>

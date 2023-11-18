@@ -15,84 +15,30 @@ namespace WebApplication
     public partial class Signup : System.Web.UI.Page
     {
         MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["dbConnectionString"].ConnectionString);
-        static string flag = "false";
         static string date;
-        static string strName;
-        static string strEmail;
-        static string strCity;
-        static string strDOB;
-        static string strAbout;
-        static byte[] img;
         protected void Page_Load(object sender, EventArgs e)
         {
 
         }
         protected void btnMailConfirm_Click(object sender, EventArgs e)
         {
-            bool flag = GetUser(txtEmail.Text.Trim());
-            if(flag == true)
-            {
-                if(strName ==null || strEmail == null || strCity == null || strDOB == null || strAbout == null || img == null)
-                {
-                    Response.Redirect("UserEntry.aspx");
-                }
-                else
-                {
-                    lblError.Text = "You're already signed up with " + txtEmail.Text.Trim() + "<br/> Try to <a href='Login.aspx' style='font-size:16px;color:white;text-decoration:none;background-color:#0f6fec;padding:5px;'>sign in</a>";
-                }
-            }
-            else if (flag == false)
-            {
-                date = DateTime.Now.ToString("MMyydd");
-                Task task = new Task(sendMail);
-                task.Start();
-                txtCode.Visible = true;
-                btnCodeConfirm.Visible = true;
-                txtEmail.Visible = false;
-                btnMailConfirm.Visible = false;
-            }
+            date = DateTime.Now.ToString("MMyydd");
+            //Task task = new Task(sendMail);
+            //task.Start();
+            txtCode.Visible = true;
+            btnCodeConfirm.Visible = true;
+            txtEmail.Visible = false;
+            txtName.Visible = false;
+            btnMailConfirm.Visible = false;
         }
         protected void btnCodeConfirm_Click(object sender, EventArgs e)
         {
             if (txtCode.Text.Trim() == date)
             {
+                lblError.Text="";
                 pnlMail.Visible = false;
                 pnlPswd.Visible = true;
             }
-        }
-        private bool GetUser(string emailId)
-        {
-            bool flag = false;
-            try
-            {
-                con.Open();
-                MySqlDataReader dr = null;
-                MySqlCommand cmd = con.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "SELECT id,Name,Email,city,dob,about,image1 FROM mySite.users where email='" + emailId + "'";
-                dr = cmd.ExecuteReader();
-                while (dr.Read())
-                {
-                    strName = Convert.ToString(dr["Name"]);
-                    strEmail = Convert.ToString(dr["Email"]);
-
-                    strCity = Convert.ToString(dr["city"]);
-                    strDOB = Convert.ToString(dr["dob"]);
-                    strAbout = Convert.ToString(dr["about"]); 
-                    strAbout = Convert.ToString(dr["image1"]);
-                    img = (byte[])dr["image1"];
-                    flag = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "alert('Technical issues. please try later');", true);
-            }
-            finally
-            {
-                con.Close();
-            }
-            return flag;
         }
         private void sendMail()
         {
@@ -113,12 +59,10 @@ namespace WebApplication
                     smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                     smtp.Port = 587;
                     smtp.Send(mm);
-                    flag = "true";
                 }
             }
             catch (Exception e)
             {
-                flag = e.Message;
                 ClientScript.RegisterStartupScript(Page.GetType(), "validation", $"<script language='javascript'>alert('{e.Message.ToString()}')</script>");
             }
         }
@@ -126,10 +70,69 @@ namespace WebApplication
         {
             if (txtPswd.Text.Trim() == txtConPswd.Text.Trim())
             {
+                UserInsert();
+                int id = BindUserId(txtEmail.Text.Trim());
+                StoreValueInCookies("salngId", id.ToString());
+                StoreValueInCookies("salngName", txtName.Text.Trim());
                 StoreValueInCookies("salngEmail", txtEmail.Text.Trim());
-                Session["password"] = txtPswd.Text.Trim();
                 Response.Redirect("UserEntry.aspx");
             }
+        }
+        private void UserInsert()
+        {
+            try
+            {
+                MySqlParameter[] msp = new MySqlParameter[3];
+                msp[0] = new MySqlParameter("p_Name", MySqlDbType.VarChar);
+                msp[1] = new MySqlParameter("p_Email", MySqlDbType.VarChar);
+                msp[2] = new MySqlParameter("p_Password", MySqlDbType.VarChar);
+
+                msp[0].Value = txtName.Text.Trim();
+                msp[1].Value = txtEmail.Text.Trim();
+                msp[2].Value = txtPswd.Text.Trim();
+
+                MySqlCommand cmd2 = new MySqlCommand();
+                cmd2.Connection = con;
+                cmd2.CommandType = CommandType.StoredProcedure;
+                cmd2.CommandText = "Pro_UserEmail_Insert";
+                cmd2.Parameters.AddRange(msp);
+                con.Open();
+                cmd2.ExecuteNonQuery();
+            }
+            catch(Exception ex)
+            {
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+        protected int BindUserId(string emailId)
+        {
+            int id = 0;
+            try
+            {
+                con.Open();
+                MySqlDataReader dr = null;
+                MySqlCommand cmd = con.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT id FROM mySite.users where email='" + emailId + "'";
+                dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    id = Convert.ToInt32(dr["id"]);
+                    break;
+                }
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "alert('Technical issues. please try later');", true);
+            }
+            finally
+            {
+                con.Close();
+            }
+            return id;
         }
         private void StoreValueInCookies(string key, string value)
         {

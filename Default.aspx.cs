@@ -17,7 +17,11 @@ namespace WebApplication
         MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["dbConnectionString"].ConnectionString);
 
         int maxCount;
+        int randomData = 10;
         string[] arryInterests;
+        string cookieName = "salngName";
+        string cookieEmail = "salngEmail";
+        string cookieId = "salngId";
         protected void Page_Load(object sender, EventArgs e)
         {
             maxCount = MaxRecord();
@@ -30,11 +34,21 @@ namespace WebApplication
             }
             if (!Page.IsPostBack)
             {
-                Data data = new Data();
-                DataTable dt = data.GetRandomDataRecords(5);
-                Session["DataTable"] = dt;
-                rptUsers.DataSource = dt;
-                rptUsers.DataBind();
+                if (HttpContext.Current.Request.Cookies[cookieName] != null && HttpContext.Current.Request.Cookies[cookieEmail] != null && HttpContext.Current.Request.Cookies[cookieId] != null)
+                {
+                    Data data = new Data();
+                    DataTable dt = data.GetRandomDataRecords(randomData);
+                    Session["DataTable"] = dt;
+                    rptUsers.DataSource = dt;
+                    rptUsers.DataBind();
+                }
+                else
+                {
+                    RemoveValueInCookies("salngEmail");
+                    RemoveValueInCookies("salngName");
+                    RemoveValueInCookies("salngId");
+                    Response.Redirect("Login.aspx");
+                }
             }
             ScriptManager.RegisterStartupScript(Page, Page.GetType(), "swiperInit", "initSwiper();", true);
         }
@@ -174,7 +188,7 @@ namespace WebApplication
             DataTable existingData = (DataTable)Session["DataTable"];
             Session.Remove("DataTable");
             Data dataAccess = new Data();
-            DataTable NewDt = dataAccess.GetRandomDataRecords(5);
+            DataTable NewDt = dataAccess.GetRandomDataRecords(randomData);
             existingData.Merge(NewDt);
             Session["DataTable"] = existingData;
             rptUsers.DataSource = existingData;
