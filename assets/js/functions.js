@@ -418,7 +418,7 @@ var e = {
 				var removeItemBtn = item.getAttribute('data-remove-item-button') == 'true' ? true : false;
 				var placeHolder = item.getAttribute('data-placeholder') == 'false' ? false : true;
 				var placeHolderVal = item.getAttribute('data-placeholder-val') ? item.getAttribute('data-placeholder-val') : 'Type and hit enter';
-				var maxItemCount = item.getAttribute('data-max-item-count') ? item.getAttribute('data-max-item-count') : 3;
+				var maxItemCount = item.getAttribute('data-max-item-count') ? item.getAttribute('data-max-item-count') : 6;
 				var searchEnabled = item.getAttribute('data-search-enabled') == 'true' ? true : false;
 				var position = item.getAttribute('data-position') ? item.getAttribute('data-position') : 'auto';
 				var choices = new Choices(item, {

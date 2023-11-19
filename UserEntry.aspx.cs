@@ -32,7 +32,7 @@ namespace WebApplication
         List<string> lstInterst = new List<string>();
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            if (!Page.IsPostBack)
             {
                 lstInterst.Clear();
                 if (Request.QueryString["code"] != null)
@@ -41,7 +41,9 @@ namespace WebApplication
                 }
                 if (HttpContext.Current.Request.Cookies[cookieName] != null && HttpContext.Current.Request.Cookies[cookieEmail] != null)
                 {
-                    Tuple<int,bool> id = BindUserId(HttpContext.Current.Request.Cookies[cookieEmail].Value);
+                    string id = HttpContext.Current.Request.Cookies["salngId"].Value;
+                    BindUserId(HttpContext.Current.Request.Cookies[cookieEmail].Value);
+                    BindUserInterests(id);
                 }
                 else
                 {
@@ -113,12 +115,18 @@ namespace WebApplication
                 }
                 
                 string imgType = FileUpload1.PostedFile.ContentType.ToString();
-                if (txtDob.Text.Trim() != "" && txtAbout.Text.Trim() != "" && imgType.Contains("jpeg"))
+                bool flag = false;
+                if(imgType.Contains("jpeg") || imgType.Contains("application/octet-stream"))
+                {
+                    flag = true;
+                }
+                if (txtDob.Text.Trim() != "" && txtAbout.Text.Trim() != "" && flag==true)
                 {
                     int id = Convert.ToInt32(HttpContext.Current.Request.Cookies["salngId"].Value);
                     UserInsert(id);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(500);
                     UploadInterests(id);
+                    Session["edit"] = null;
                     Response.Redirect("Default.aspx", false);
                 }
                 else
@@ -232,6 +240,7 @@ namespace WebApplication
                 dr = cmd.ExecuteReader();
                 if (dr.Read())
                 {
+                    bool flag = Session["edit"]?.ToString() == "EditProfile" ? true : false;
                     int id= Convert.ToInt32(dr["id"]);
                     txtName.Text = dr["Name"]?.ToString();
                     txtCity.Text = dr["city"]?.ToString();
@@ -244,6 +253,15 @@ namespace WebApplication
                     else
                     {
                         ddlGen.Items.FindByValue("female").Selected = true;
+                    }
+                    if(flag == true)
+                    {
+                        ddlGen.Attributes.Add("disabled", "disabled");
+                        ddlGen.CssClass = "form-select";
+                        txtName.Enabled = false;
+                        txtName.CssClass = "form-control";
+                        txtDob.Enabled = false;
+                        txtDob.CssClass = "form-control";
                     }
                     string lookforValue = dr["lookfor"]?.ToString();
                     if (lookforValue == "0")
@@ -277,11 +295,36 @@ namespace WebApplication
             }
             return tuple;
         }
+        protected void BindUserInterests(string value)
+        {
+            try
+            {
+                con.Open();
+                MySqlDataReader dr = null;
+                MySqlCommand cmd = con.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "with cte as(SELECT id,IF(i.reading=1,'Reading',NULL) AS reading,IF(i.trekking=1,'Trekking',NULL) AS trekking,IF(i.hiking=1,'Hiking',NULL) AS hiking,IF(i.singing=1,'Singing',NULL) AS singing,IF(i.dancing=1,'Dancing',NULL) AS dancing,IF(i.listenMusic=1,'Music lover',NULL) AS listenMusic,IF(i.gardening=1,'Gardening',NULL) AS gardening,IF(i.cooking=1,'Cooking',NULL) AS cooking,IF(i.gym=1,'Gym',NULL) AS gym,IF(i.foodie=1,'Foodie',NULL) AS foodie,IF(i.travelling=1,'travelling',NULL) AS travelling,IF(i.art=1,'Artist',NULL) AS art,IF(i.photography=1,'Photography',NULL) AS photography,IF(i.teaching=1,'Teaching',NULL) AS teaching,IF(i.technology=1,'Technology',NULL) AS technology,IF(i.coding=1,'Coding',NULL) AS coding,IF(i.petCaring=1,'Pet caring',NULL) AS petCaring,IF(i.outdoorGaming=1,'Outdoor gaming',NULL) AS outdoorGaming,IF(i.indoorGaming=1,'Indoor gaming',NULL) AS indoorGaming,IF(i.fashion=1,'Fashion',NULL) AS fashion,IF(i.nightLife=1,'Night life',NULL) AS nightLife,IF(i.daylife=1,'Day life',NULL) AS daylife,IF(i.investing=1,'Investing',NULL) AS investing,IF(i.business=1,'Business',NULL) AS business FROM mySite.interest i) SELECT id,CONCAT_WS(',', reading,trekking,hiking,singing,dancing,listenMusic,gardening,cooking,gym,foodie,travelling,art,photography,teaching,technology,coding,petCaring,outdoorGaming,indoorGaming,fashion,nightLife,daylife,investing,business) AS interests FROM cte where id=" + value+ "";
+                dr = cmd.ExecuteReader();
+                if (dr.Read())
+                {
+                    lblInterests.Visible = true;
+                    lblInterests.Text = dr["interests"]?.ToString()==null?"": "your interests-"+ dr["interests"]?.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "alert('Technical issues. please try later');", true);
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
         private void UploadInterests(int id)
         {
             try
             {
-                MySqlParameter[] msp = new MySqlParameter[23];
+                MySqlParameter[] msp = new MySqlParameter[25];
                 msp[0] = new MySqlParameter("p_id", MySqlDbType.Int16);
                 msp[1] = new MySqlParameter("p_reading", MySqlDbType.Int16);
                 msp[2] = new MySqlParameter("p_trekking", MySqlDbType.Int16);
@@ -305,6 +348,8 @@ namespace WebApplication
                 msp[20] = new MySqlParameter("p_fashion", MySqlDbType.Int16);
                 msp[21] = new MySqlParameter("p_nightLife", MySqlDbType.Int16);
                 msp[22] = new MySqlParameter("p_daylife", MySqlDbType.Int16);
+                msp[23] = new MySqlParameter("p_investing", MySqlDbType.Int16);
+                msp[24] = new MySqlParameter("p_business", MySqlDbType.Int16);
 
                 msp[0].Value = id;
                 if (lstInterst.Contains("reading")){ msp[1].Value = 1; }
@@ -470,6 +515,22 @@ namespace WebApplication
                 else
                 {
                     msp[22].Value = 0;
+                }
+                if (lstInterst.Contains("investing"))
+                {
+                    msp[23].Value = 1;
+                }
+                else
+                {
+                    msp[23].Value = 0;
+                }
+                if (lstInterst.Contains("business"))
+                {
+                    msp[24].Value = 1;
+                }
+                else
+                {
+                    msp[24].Value = 0;
                 }
 
                 MySqlCommand cmd2 = new MySqlCommand();

@@ -69,6 +69,24 @@ namespace WebApplication
         protected global::System.Web.UI.WebControls.DropDownList ddlLookingFor;
 
         /// <summary>
+        /// lblInterests control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblInterests;
+
+        /// <summary>
+        /// multiSelectListBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ListBox multiSelectListBox;
+
+        /// <summary>
         /// txtAbout control.
         /// </summary>
         /// <remarks>
@@ -103,15 +121,6 @@ namespace WebApplication
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputHidden hdnCroppedImageData;
-
-        /// <summary>
-        /// multiSelectListBox control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox multiSelectListBox;
 
         /// <summary>
         /// BtnSubmit control.

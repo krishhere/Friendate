@@ -64,47 +64,35 @@
           <div class="card-body">
             <div class="row g-3">
               <div class="col-sm-6 col-lg-3">
-                <label class="form-label">Name (Required)</label>
+                <label class="form-label">Name</label>
                   <asp:TextBox ID="txtName" runat="server" class="form-control" placeholder="Enter Name"></asp:TextBox>
               </div>
               <div class="col-sm-6 col-lg-3">
-                <label class="form-label">City (Required)</label>
+                <label class="form-label">City </label>
                   <asp:TextBox ID="txtCity" runat="server" class="form-control" placeholder="City" ReadOnly></asp:TextBox>
               </div>
-              <div class="col-sm-6 col-lg-2">
-                <label class="form-label">Date of birth (Required)</label>
+              <div class="col-sm-6 col-lg-3">
+                <label class="form-label">Date of birth </label>
                   <asp:TextBox ID="txtDob" runat="server" class="form-control" placeholder="dd/mm/yyyy"></asp:TextBox>
               </div>
-              <div class="col-sm-6 col-lg-2">
-                <label class="form-label">Gender (required)</label>
+              <div class="col-sm-6 col-lg-3">
+                <label class="form-label">Gender</label>
                   <asp:DropDownList ID="ddlGen" runat="server" class="form-select js-choice">
                       <asp:ListItem Value="male">Male</asp:ListItem>
                       <asp:ListItem Value="female">Female</asp:ListItem>
                   </asp:DropDownList>
               </div>
               <div class="col-sm-6 col-lg-2">
-                <label class="form-label">Looking for (required)</label>
+                <label class="form-label">Looking for</label>
                   <asp:DropDownList ID="ddlLookingFor" runat="server" class="form-select js-choice" >
                       <asp:ListItem Value="Both">Friend / Date</asp:ListItem>
                       <asp:ListItem Value="Friend">Friend</asp:ListItem>
                       <asp:ListItem Value="Date">Date</asp:ListItem>
                   </asp:DropDownList>
               </div>
-              <div class="col-md-6 col-lg-6">
-                <label class="form-label">About you (Character limit: 10 - 300) (Required)</label>
-                  <asp:TextBox ID="txtAbout" runat="server" class="form-control" rows="3" TextMode="MultiLine" placeholder="Example: I am a techie"></asp:TextBox>
-              </div>
-              <div class="col-md-6 col-lg-6">
-                <label class="form-label">Upload your pic (Required)</label><br />
-                  <asp:FileUpload ID="FileUpload1" runat="server" /><br />
-						<%--<asp:Image ID="imgPreview" Height="260px" runat="server" />--%>
-                  <img id="imgCrop" runat="server" style="width: 300px;Height:300px" /><br />
-                  <button type="button" id="btnCrop" class="btn btn-primary mb-0">Crop Image</button>
-                    <br />
-                   <input type="hidden" id="hdnCroppedImageData" runat="server" />
-              </div>
-              <div class="col-md-6 col-lg-6">
-                <label class="form-label">Select your interests (atleast 3) (Required)</label>
+              <div class="col-md-6 col-lg-5">
+                  <asp:Label ID="lblInterests" runat="server" Text="" Visible="false"></asp:Label><br />
+                <label class="form-label">Select your interests (atleast 3) </label><br />
                  <asp:ListBox ID="multiSelectListBox" runat="server" SelectionMode="Multiple" class="form-select js-choice" data-search-enabled="true">
                     <asp:ListItem Text="reading" Value="reading" />
                     <asp:ListItem Text="trekking" Value="trekking" />
@@ -132,10 +120,22 @@
                     <asp:ListItem Text="business" Value="business" />
                 </asp:ListBox>
               </div>
-              <div class="col-12 text-end">
-                    <asp:Button ID="BtnSubmit" runat="server" Text="Go ahead" Enabled="false" OnClick="BtnSubmit_Click"  OnClientClick="showLoadingMessage();" class="btn btn-primary mb-0" />
+              <div class="col-md-6 col-lg-5">
+                <label class="form-label">About you (Character limit: 10 - 300) </label>
+                  <asp:TextBox ID="txtAbout" runat="server" class="form-control" rows="3" TextMode="MultiLine" placeholder="Example: I am a techie"></asp:TextBox>
               </div>
-              <div class="col-12 text-end">
+              <div class="col-md-6 col-lg-6">
+                <label class="form-label">Upload your pic </label><br />
+                  <asp:FileUpload ID="FileUpload1" runat="server" /><br />
+						<%--<asp:Image ID="imgPreview" Height="260px" runat="server" />--%>
+                  <img id="imgCrop" runat="server" style="width: 300px;Height:300px" /><br />
+                   <input type="hidden" id="hdnCroppedImageData" runat="server" />
+              </div>
+              <div class="col-md-6 col-lg-6">
+                  <button type="button" id="btnCrop" class="btn btn-primary mb-0 end-100">Crop Image</button><br /><br />
+                  <asp:Button ID="BtnSubmit" runat="server" class="btn btn-primary mb-0" Text="Go ahead" Enabled="false" OnClick="BtnSubmit_Click" OnClientClick="showLoadingMessage();" style="position: absolute;bottom: 0px;right:0px;"/>
+              </div>
+              <div class="col-md-12 col-lg-12">
                   <asp:Label ID="lblMsg" runat="server" Text="" Visible="false" ForeColor="Red" Font-Bold="true"></asp:Label>
               </div>
             </div>
@@ -143,7 +143,6 @@
         </div>
       </div>
     </div>
-    
   </div>
 </main>
 <script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
