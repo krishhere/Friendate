@@ -212,6 +212,7 @@
     <Content Include="assets\vendor\tiny-slider\dist\tiny-slider.js" />
     <Content Include="assets\vendor\zuck.js\dist\zuck.min.css" />
     <Content Include="assets\vendor\zuck.js\dist\zuck.min.js" />
+    <Content Include="DB.sql" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />

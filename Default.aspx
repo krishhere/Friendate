@@ -53,7 +53,7 @@
                         <span class="nav-item small"> <asp:Label ID="lblCity" runat="server" Text='<%# Eval("city") %>'></asp:Label></span>
                       </div>
                       <p class="mb-0 small">
-                          <asp:Label ID="lblLookFor" runat="server" Text="" class="badge bg-danger bg-opacity-10 text-danger mb-2 fw-bold"></asp:Label>
+                          <asp:Label ID="lblLookFor" runat="server" Text='<%# "Looking for " + Eval("lookFor") %>' class="badge bg-danger bg-opacity-10 text-danger mb-2 fw-bold"></asp:Label>
                       </p>
                     </div>
                   </div>

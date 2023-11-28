@@ -64,8 +64,9 @@
           <div class="card-body">
             <div class="row g-3">
               <div class="col-sm-6 col-lg-3">
-                <label class="form-label">Name</label>
-                  <asp:TextBox ID="txtName" runat="server" class="form-control" placeholder="Enter Name"></asp:TextBox>
+                <label class="form-label">Profile Name</label>
+                  <asp:TextBox ID="txtName" runat="server" class="form-control" placeholder="Enter Profile Name"></asp:TextBox>
+                  <%--<asp:TextBox ID="txtName" runat="server" class="form-control fakepassword" placeholder="Enter Profile Name" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Can't be changed further. Accepts maximum 10 characters." data-bs-original-title="" title="" MaxLength="10"></asp:TextBox>--%>
               </div>
               <div class="col-sm-6 col-lg-3">
                 <label class="form-label">City </label>
@@ -94,30 +95,35 @@
                   <asp:Label ID="lblInterests" runat="server" Text="" Visible="false"></asp:Label><br />
                 <label class="form-label">Select your interests (atleast 3) </label><br />
                  <asp:ListBox ID="multiSelectListBox" runat="server" SelectionMode="Multiple" class="form-select js-choice" data-search-enabled="true">
-                    <asp:ListItem Text="reading" Value="reading" />
-                    <asp:ListItem Text="trekking" Value="trekking" />
-                    <asp:ListItem Text="hiking" Value="hiking" />
-                    <asp:ListItem Text="art" Value="art" />
-                    <asp:ListItem Text="singing" Value="singing" />
-                    <asp:ListItem Text="dancing" Value="dancing" />
-                    <asp:ListItem Text="listen Music" Value="listenMusic" />
-                    <asp:ListItem Text="gardening" Value="gardening" />
-                    <asp:ListItem Text="cooking" Value="cooking" />
-                    <asp:ListItem Text="gym" Value="gym" />
-                    <asp:ListItem Text="foodie" Value="foodie" />
-                    <asp:ListItem Text="travelling" Value="travelling" />
-                    <asp:ListItem Text="photography" Value="photography" />
-                    <asp:ListItem Text="teaching" Value="teaching" />
-                    <asp:ListItem Text="technology" Value="technology" />
-                    <asp:ListItem Text="out door Gaming" Value="outdoorGaming" />
-                    <asp:ListItem Text="in door Gaming" Value="indoorGaming" />
-                    <asp:ListItem Text="petCaring" Value="petCaring" />
-                    <asp:ListItem Text="coding" Value="coding" />
-                    <asp:ListItem Text="fashion" Value="fashion" />
-                    <asp:ListItem Text="night Life" Value="nightLife" />
-                    <asp:ListItem Text="day Life" Value="daylife" />
-                    <asp:ListItem Text="investing" Value="investing" />
-                    <asp:ListItem Text="business" Value="business" />
+                    <asp:ListItem Text="Reading" Value="reading" />
+                    <asp:ListItem Text="Trekking" Value="trekking" />
+                    <asp:ListItem Text="Hiking" Value="hiking" />
+                    <asp:ListItem Text="Art" Value="art" />
+                    <asp:ListItem Text="Singing" Value="singing" />
+                    <asp:ListItem Text="Dancing" Value="dancing" />
+                    <asp:ListItem Text="Listen Music" Value="listenMusic" />
+                    <asp:ListItem Text="Gardening" Value="gardening" />
+                    <asp:ListItem Text="Cooking" Value="cooking" />
+                    <asp:ListItem Text="fitness" Value="fitness" />
+                    <asp:ListItem Text="Foodie" Value="foodie" />
+                    <asp:ListItem Text="Travelling" Value="travelling" />
+                    <asp:ListItem Text="Photography" Value="photography" />
+                    <asp:ListItem Text="Teaching" Value="teaching" />
+                    <asp:ListItem Text="Technology" Value="technology" />
+                    <asp:ListItem Text="Outdoor Gaming" Value="outdoorGaming" />
+                    <asp:ListItem Text="Indoor Gaming" Value="indoorGaming" />
+                    <asp:ListItem Text="Pets caring" Value="petCaring" />
+                    <asp:ListItem Text="Coding" Value="coding" />
+                    <asp:ListItem Text="Fashion" Value="fashion" />
+                    <asp:ListItem Text="Night Life" Value="nightLife" />
+                    <asp:ListItem Text="Day Life" Value="daylife" />
+                    <asp:ListItem Text="Investment" Value="investment" />
+                    <asp:ListItem Text="Business" Value="business" />
+                    <asp:ListItem Text="Movies" Value="movies" />
+                    <asp:ListItem Text="Shopping" Value="shopping" />
+                    <asp:ListItem Text="Road trips" Value="roadtrips" />
+                    <asp:ListItem Text="Politics" Value="politics" />
+                    <asp:ListItem Text="Chill at bar" Value="chillatbar" />
                 </asp:ListBox>
               </div>
               <div class="col-md-6 col-lg-5">

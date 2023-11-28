@@ -67,37 +67,25 @@ namespace WebApplication
 
                     Label LookFor = e.Item.FindControl("lblLookFor") as Label;
                     DataRowView dr = (DataRowView)e.Item.DataItem;
-                    string value = "Looking for ";
-                    if (!Convert.IsDBNull(dr["lookFor"]))
+                    HtmlGenericControl liLnkFriendItem = (HtmlGenericControl)e.Item.FindControl("liLnkFriend");
+                    HtmlGenericControl liLnkDateItem = (HtmlGenericControl)e.Item.FindControl("liLnkDate");
+                    string strlookFor = dr["lookFor"].ToString();
+                    LinkButton lbFriend = e.Item.FindControl("lnkFriend") as LinkButton;
+                    LinkButton lbDate = e.Item.FindControl("lnkDate") as LinkButton;
+                    if (strlookFor == "friend")
                     {
-                        HtmlGenericControl liLnkFriendItem = (HtmlGenericControl)e.Item.FindControl("liLnkFriend");
-                        HtmlGenericControl liLnkDateItem = (HtmlGenericControl)e.Item.FindControl("liLnkDate");
-                        int i = Convert.ToInt32(dr["lookFor"].ToString());
-                        LinkButton lbFriend = e.Item.FindControl("lnkFriend") as LinkButton;
-                        LinkButton lbDate = e.Item.FindControl("lnkDate") as LinkButton;
-                        if (i == 0)
-                        {
-                            value = value + "friend";
-                            lbFriend.Visible = true;
-                            lbDate.Visible = false;
-                        }
-                        else if (i == 1)
-                        {
-                            value = value + "date";
-                            lbDate.Visible = true;
-                            lbFriend.Visible = false;
-                        }
-                        else
-                        {
-                            value = value + "friend or date";
-                            lbFriend.Visible = true;
-                            lbDate.Visible = true;
-                        }
-                        LookFor.Text = value;
+                        lbFriend.Visible = true;
+                        lbDate.Visible = false;
+                    }
+                    else if (strlookFor == "date")
+                    {
+                        lbDate.Visible = true;
+                        lbFriend.Visible = false;
                     }
                     else
                     {
-                        LookFor.Text = value + "fun";
+                        lbFriend.Visible = true;
+                        lbDate.Visible = true;
                     }
 
                     Repeater rptInterest = e.Item.FindControl("rptUserInterests") as Repeater;
@@ -140,7 +128,6 @@ namespace WebApplication
                 }
                 catch(Exception ex)
                 {
-                    string hghj = ex.Message;
                     if(ex.Message== "Object reference not set to an instance of an object.")
                     {
                         RemoveValueInCookies("salngEmail");

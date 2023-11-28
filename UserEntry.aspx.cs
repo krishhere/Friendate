@@ -39,24 +39,21 @@ namespace WebApplication
                 {
                     GetToken(Request.QueryString["code"].ToString());
                 }
-                if (HttpContext.Current.Request.Cookies[cookieName] != null && HttpContext.Current.Request.Cookies[cookieEmail] != null)
-                {
-                    string id = HttpContext.Current.Request.Cookies["salngId"].Value;
-                    BindUserId(HttpContext.Current.Request.Cookies[cookieEmail].Value);
-                    BindUserInterests(id);
-                }
-                else
+                if (HttpContext.Current.Request.Cookies[cookieName] == null && HttpContext.Current.Request.Cookies[cookieEmail] == null)
                 {
                     RemoveValueInCookies("salngEmail");
                     RemoveValueInCookies("salngName");
                     RemoveValueInCookies("salngId");
                     Response.Redirect("Login.aspx");
                 }
-                if (city == null)
+                else
                 {
-                    //city = GetLocation();
-                    city = "Hyd";
+                    //string id = HttpContext.Current.Request.Cookies["salngId"].Value;
+                    //BindUserId(HttpContext.Current.Request.Cookies[cookieEmail].Value);
+                    //BindUserInterests(id);
                 }
+                //city = GetLocation();
+                city = "Hyd";
                 txtCity.Text = city;
             }
         }
@@ -126,7 +123,6 @@ namespace WebApplication
                     UserInsert(id);
                     Thread.Sleep(500);
                     UploadInterests(id);
-                    Session["edit"] = null;
                     Response.Redirect("Default.aspx", false);
                 }
                 else
@@ -208,12 +204,17 @@ namespace WebApplication
                 msp[5].Value = bytes;
                 msp[6].Value = id;
 
-                MySqlCommand cmd2 = new MySqlCommand();
-                cmd2.Connection = con;
-                cmd2.CommandType = CommandType.StoredProcedure;
-                cmd2.CommandText = "Pro_User_Insert";
-                cmd2.Parameters.AddRange(msp);
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = con;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "Pro_User_Insert";
+                cmd.Parameters.AddRange(msp);
                 con.Open();
+                cmd.ExecuteNonQuery();
+
+                string query = "insert into interest(id) values(@p_id)";
+                MySqlCommand cmd2 = new MySqlCommand(query, con);
+                cmd2.Parameters.AddWithValue("@p_id", id);
                 cmd2.ExecuteNonQuery();
             }
             catch
@@ -303,7 +304,7 @@ namespace WebApplication
                 MySqlDataReader dr = null;
                 MySqlCommand cmd = con.CreateCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "with cte as(SELECT id,IF(i.reading=1,'Reading',NULL) AS reading,IF(i.trekking=1,'Trekking',NULL) AS trekking,IF(i.hiking=1,'Hiking',NULL) AS hiking,IF(i.singing=1,'Singing',NULL) AS singing,IF(i.dancing=1,'Dancing',NULL) AS dancing,IF(i.listenMusic=1,'Music lover',NULL) AS listenMusic,IF(i.gardening=1,'Gardening',NULL) AS gardening,IF(i.cooking=1,'Cooking',NULL) AS cooking,IF(i.gym=1,'Gym',NULL) AS gym,IF(i.foodie=1,'Foodie',NULL) AS foodie,IF(i.travelling=1,'travelling',NULL) AS travelling,IF(i.art=1,'Artist',NULL) AS art,IF(i.photography=1,'Photography',NULL) AS photography,IF(i.teaching=1,'Teaching',NULL) AS teaching,IF(i.technology=1,'Technology',NULL) AS technology,IF(i.coding=1,'Coding',NULL) AS coding,IF(i.petCaring=1,'Pet caring',NULL) AS petCaring,IF(i.outdoorGaming=1,'Outdoor gaming',NULL) AS outdoorGaming,IF(i.indoorGaming=1,'Indoor gaming',NULL) AS indoorGaming,IF(i.fashion=1,'Fashion',NULL) AS fashion,IF(i.nightLife=1,'Night life',NULL) AS nightLife,IF(i.daylife=1,'Day life',NULL) AS daylife,IF(i.investing=1,'Investing',NULL) AS investing,IF(i.business=1,'Business',NULL) AS business FROM mySite.interest i) SELECT id,CONCAT_WS(',', reading,trekking,hiking,singing,dancing,listenMusic,gardening,cooking,gym,foodie,travelling,art,photography,teaching,technology,coding,petCaring,outdoorGaming,indoorGaming,fashion,nightLife,daylife,investing,business) AS interests FROM cte where id=" + value+ "";
+                cmd.CommandText = "with cte as(SELECT id,IF(i.reading=1,'Reading',NULL) AS reading,IF(i.trekking=1,'Trekking',NULL) AS trekking,IF(i.hiking=1,'Hiking',NULL) AS hiking,IF(i.singing=1,'Singing',NULL) AS singing,IF(i.dancing=1,'Dancing',NULL) AS dancing,IF(i.listenMusic=1,'Music lover',NULL) AS listenMusic,IF(i.gardening=1,'Gardening',NULL) AS gardening,IF(i.cooking=1,'Cooking',NULL) AS cooking,IF(i.fitness=1,'Gym',NULL) AS fitness,IF(i.foodie=1,'Foodie',NULL) AS foodie,IF(i.travelling=1,'travelling',NULL) AS travelling,IF(i.art=1,'Artist',NULL) AS art,IF(i.photography=1,'Photography',NULL) AS photography,IF(i.teaching=1,'Teaching',NULL) AS teaching,IF(i.technology=1,'Technology',NULL) AS technology,IF(i.coding=1,'Coding',NULL) AS coding,IF(i.petCaring=1,'Pet caring',NULL) AS petCaring,IF(i.outdoorGaming=1,'Outdoor gaming',NULL) AS outdoorGaming,IF(i.indoorGaming=1,'Indoor gaming',NULL) AS indoorGaming,IF(i.fashion=1,'Fashion',NULL) AS fashion,IF(i.nightLife=1,'Night life',NULL) AS nightLife,IF(i.daylife=1,'Day life',NULL) AS daylife,IF(i.investing=1,'Investment',NULL) AS investing,IF(i.business=1,'Business',NULL) AS business FROM mySite.interest i) SELECT id,CONCAT_WS(',', reading,trekking,hiking,singing,dancing,listenMusic,gardening,cooking,fitness,foodie,travelling,art,photography,teaching,technology,coding,petCaring,outdoorGaming,indoorGaming,fashion,nightLife,daylife,investing,business) AS interests FROM cte where id=" + value+ "";
                 dr = cmd.ExecuteReader();
                 if (dr.Read())
                 {
@@ -314,236 +315,6 @@ namespace WebApplication
             catch (Exception ex)
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "alert('Technical issues. please try later');", true);
-            }
-            finally
-            {
-                con.Close();
-            }
-        }
-        private void UploadInterests(int id)
-        {
-            try
-            {
-                MySqlParameter[] msp = new MySqlParameter[25];
-                msp[0] = new MySqlParameter("p_id", MySqlDbType.Int16);
-                msp[1] = new MySqlParameter("p_reading", MySqlDbType.Int16);
-                msp[2] = new MySqlParameter("p_trekking", MySqlDbType.Int16);
-                msp[3] = new MySqlParameter("p_hiking", MySqlDbType.Int16);
-                msp[4] = new MySqlParameter("p_singing", MySqlDbType.Int16);
-                msp[5] = new MySqlParameter("p_dancing", MySqlDbType.Int16);
-                msp[6] = new MySqlParameter("p_listenMusic", MySqlDbType.Int16);
-                msp[7] = new MySqlParameter("p_gardening", MySqlDbType.Int16);
-                msp[8] = new MySqlParameter("p_cooking", MySqlDbType.Int16);
-                msp[9] = new MySqlParameter("p_gym", MySqlDbType.Int16);
-                msp[10] = new MySqlParameter("p_foodie", MySqlDbType.Int16);
-                msp[11] = new MySqlParameter("p_travelling", MySqlDbType.Int16);
-                msp[12] = new MySqlParameter("p_art", MySqlDbType.Int16);
-                msp[13] = new MySqlParameter("p_photography", MySqlDbType.Int16);
-                msp[14] = new MySqlParameter("p_teaching", MySqlDbType.Int16);
-                msp[15] = new MySqlParameter("p_technology", MySqlDbType.Int16);
-                msp[16] = new MySqlParameter("p_coding", MySqlDbType.Int16);
-                msp[17] = new MySqlParameter("p_petCaring", MySqlDbType.Int16);
-                msp[18] = new MySqlParameter("p_outdoorGaming", MySqlDbType.Int16);
-                msp[19] = new MySqlParameter("p_indoorGaming", MySqlDbType.Int16);
-                msp[20] = new MySqlParameter("p_fashion", MySqlDbType.Int16);
-                msp[21] = new MySqlParameter("p_nightLife", MySqlDbType.Int16);
-                msp[22] = new MySqlParameter("p_daylife", MySqlDbType.Int16);
-                msp[23] = new MySqlParameter("p_investing", MySqlDbType.Int16);
-                msp[24] = new MySqlParameter("p_business", MySqlDbType.Int16);
-
-                msp[0].Value = id;
-                if (lstInterst.Contains("reading")){ msp[1].Value = 1; }
-                            else { msp[1].Value = 0; }
-                if (lstInterst.Contains("trekking")) { msp[2].Value = 1; }
-                            else { msp[2].Value = 0; }
-                if (lstInterst.Contains("hiking"))
-                {
-                    msp[3].Value = 1;
-                }
-                else
-                {
-                    msp[3].Value = 0;
-                }
-                if (lstInterst.Contains("singing"))
-                {
-                    msp[4].Value = 1;
-                }
-                else
-                {
-                    msp[4].Value = 0;
-                }
-                if (lstInterst.Contains("dancing"))
-                {
-                    msp[5].Value = 1;
-                }
-                else
-                {
-                    msp[5].Value = 0;
-                }
-                if (lstInterst.Contains("listenMusic"))
-                {
-                    msp[6].Value = 1;
-                }
-                else
-                {
-                    msp[6].Value = 0;
-                }
-                if (lstInterst.Contains("gardening"))
-                {
-                    msp[7].Value = 1;
-                }
-                else
-                {
-                    msp[7].Value = 0;
-                }
-                if (lstInterst.Contains("cooking"))
-                {
-                    msp[8].Value = 1;
-                }
-                else
-                {
-                    msp[8].Value = 0;
-                }
-                if (lstInterst.Contains("gym"))
-                {
-                    msp[9].Value = 1;
-                }
-                else
-                {
-                    msp[9].Value = 0;
-                }
-                if (lstInterst.Contains("foodie"))
-                {
-                    msp[10].Value = 1;
-                }
-                else
-                {
-                    msp[10].Value = 0;
-                }
-                if (lstInterst.Contains("travelling"))
-                {
-                    msp[11].Value = 1;
-                }
-                else
-                {
-                    msp[11].Value = 0;
-                }
-                if (lstInterst.Contains("art"))
-                {
-                    msp[12].Value = 1;
-                }
-                else
-                {
-                    msp[12].Value = 0;
-                }
-                if (lstInterst.Contains("photography"))
-                {
-                    msp[13].Value = 1;
-                }
-                else
-                {
-                    msp[13].Value = 0;
-                }
-                if (lstInterst.Contains("teaching"))
-                {
-                    msp[14].Value = 1;
-                }
-                else
-                {
-                    msp[14].Value = 0;
-                }
-                if (lstInterst.Contains("technology"))
-                {
-                    msp[15].Value = 1;
-                }
-                else
-                {
-                    msp[15].Value = 0;
-                }
-                if (lstInterst.Contains("coding"))
-                {
-                    msp[16].Value = 1;
-                }
-                else
-                {
-                    msp[16].Value = 0;
-                }
-                if (lstInterst.Contains("petCaring"))
-                {
-                    msp[17].Value = 1;
-                }
-                else
-                {
-                    msp[17].Value = 0;
-                }
-                if (lstInterst.Contains("outdoorGaming"))
-                {
-                    msp[18].Value = 1;
-                }
-                else
-                {
-                    msp[18].Value = 0;
-                }
-                if (lstInterst.Contains("indoorGaming"))
-                {
-                    msp[19].Value = 1;
-                }
-                else
-                {
-                    msp[19].Value = 0;
-                }
-                if (lstInterst.Contains("fashion"))
-                {
-                    msp[20].Value = 1;
-                }
-                else
-                {
-                    msp[20].Value = 0;
-                }
-                if (lstInterst.Contains("nightLife"))
-                {
-                    msp[21].Value = 1;
-                }
-                else
-                {
-                    msp[21].Value = 0;
-                }
-                if (lstInterst.Contains("daylife"))
-                {
-                    msp[22].Value = 1;
-                }
-                else
-                {
-                    msp[22].Value = 0;
-                }
-                if (lstInterst.Contains("investing"))
-                {
-                    msp[23].Value = 1;
-                }
-                else
-                {
-                    msp[23].Value = 0;
-                }
-                if (lstInterst.Contains("business"))
-                {
-                    msp[24].Value = 1;
-                }
-                else
-                {
-                    msp[24].Value = 0;
-                }
-
-                MySqlCommand cmd2 = new MySqlCommand();
-                cmd2.Connection = con;
-                cmd2.CommandType = CommandType.StoredProcedure;
-                cmd2.CommandText = "Pro_UserInterests_Insert";
-                cmd2.Parameters.AddRange(msp);
-                con.Open();
-                cmd2.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "alert('Technical issue to save your details.');", true);
             }
             finally
             {
@@ -596,6 +367,96 @@ namespace WebApplication
         private void updateUserDetails()
         {
 
+        }
+        private void UploadInterests(int id)
+        {
+            try
+            {
+                MySqlParameter[] msp = new MySqlParameter[30];
+                msp[0] = new MySqlParameter("@p_reading", MySqlDbType.Int16);
+                msp[1] = new MySqlParameter("@p_trekking", MySqlDbType.Int16);
+                msp[2] = new MySqlParameter("@p_hiking", MySqlDbType.Int16);
+                msp[3] = new MySqlParameter("@p_singing", MySqlDbType.Int16);
+                msp[4] = new MySqlParameter("@p_dancing", MySqlDbType.Int16);
+                msp[5] = new MySqlParameter("@p_listenMusic", MySqlDbType.Int16);
+                msp[6] = new MySqlParameter("@p_gardening", MySqlDbType.Int16);
+                msp[7] = new MySqlParameter("@p_cooking", MySqlDbType.Int16);
+                msp[8] = new MySqlParameter("@p_fitness", MySqlDbType.Int16);
+                msp[9] = new MySqlParameter("@p_foodie", MySqlDbType.Int16);
+                msp[10] = new MySqlParameter("@p_travelling", MySqlDbType.Int16);
+                msp[11] = new MySqlParameter("@p_art", MySqlDbType.Int16);
+                msp[12] = new MySqlParameter("@p_photography", MySqlDbType.Int16);
+                msp[13] = new MySqlParameter("@p_teaching", MySqlDbType.Int16);
+                msp[14] = new MySqlParameter("@p_technology", MySqlDbType.Int16);
+                msp[15] = new MySqlParameter("@p_coding", MySqlDbType.Int16);
+                msp[16] = new MySqlParameter("@p_petCaring", MySqlDbType.Int16);
+                msp[17] = new MySqlParameter("@p_outdoorGaming", MySqlDbType.Int16);
+                msp[18] = new MySqlParameter("@p_indoorGaming", MySqlDbType.Int16);
+                msp[19] = new MySqlParameter("@p_fashion", MySqlDbType.Int16);
+                msp[20] = new MySqlParameter("@p_nightLife", MySqlDbType.Int16);
+                msp[21] = new MySqlParameter("@p_daylife", MySqlDbType.Int16);
+                msp[22] = new MySqlParameter("@p_investment", MySqlDbType.Int16);
+                msp[23] = new MySqlParameter("@p_business", MySqlDbType.Int16);
+                msp[24] = new MySqlParameter("@p_movies", MySqlDbType.Int16);
+                msp[25] = new MySqlParameter("@p_shopping", MySqlDbType.Int16);
+                msp[26] = new MySqlParameter("@p_roadtrips", MySqlDbType.Int16);
+                msp[27] = new MySqlParameter("@p_politics", MySqlDbType.Int16);
+                msp[28] = new MySqlParameter("@p_chillatbar", MySqlDbType.Int16);
+                msp[29] = new MySqlParameter("@p_id", MySqlDbType.Int64);
+
+                msp[0].Value = lstInterst.Contains("reading") ? 1 : 0;
+                msp[1].Value = lstInterst.Contains("trekking") ? 1 : 0;
+                msp[2].Value = lstInterst.Contains("hiking") ? 1 : 0;
+                msp[3].Value = lstInterst.Contains("singing") ? 1 : 0;
+                msp[4].Value = lstInterst.Contains("dancing") ? 1 : 0;
+                msp[5].Value = lstInterst.Contains("listenMusic") ? 1 : 0;
+                msp[6].Value = lstInterst.Contains("gardening") ? 1 : 0;
+                msp[7].Value = lstInterst.Contains("cooking") ? 1 : 0;
+                msp[8].Value = lstInterst.Contains("fitness") ? 1 : 0;
+                msp[9].Value = lstInterst.Contains("foodie") ? 1 : 0;
+                msp[10].Value = lstInterst.Contains("travelling") ? 1 : 0;
+                msp[11].Value = lstInterst.Contains("art") ? 1 : 0;
+                msp[12].Value = lstInterst.Contains("photography") ? 1 : 0;
+                msp[13].Value = lstInterst.Contains("teaching") ? 1 : 0;
+                msp[14].Value = lstInterst.Contains("technology") ? 1 : 0;
+                msp[15].Value = lstInterst.Contains("coding") ? 1 : 0;
+                msp[16].Value = lstInterst.Contains("petCaring") ? 1 : 0;
+                msp[17].Value = lstInterst.Contains("outdoorGaming") ? 1 : 0;
+                msp[18].Value = lstInterst.Contains("indoorGaming") ? 1 : 0;
+                msp[19].Value = lstInterst.Contains("fashion") ? 1 : 0;
+                msp[20].Value = lstInterst.Contains("nightLife") ? 1 : 0;
+                msp[21].Value = lstInterst.Contains("daylife") ? 1 : 0;
+                msp[22].Value = lstInterst.Contains("investment") ? 1 : 0;
+                msp[23].Value = lstInterst.Contains("business") ? 1 : 0;
+                msp[24].Value = lstInterst.Contains("movies") ? 1 : 0;
+                msp[25].Value = lstInterst.Contains("shopping") ? 1 : 0;
+                msp[26].Value = lstInterst.Contains("roadtrips") ? 1 : 0;
+                msp[27].Value = lstInterst.Contains("politics") ? 1 : 0;
+                msp[28].Value = lstInterst.Contains("chillatbar") ? 1 : 0;
+                msp[29].Value = id;
+
+                //string query = "UPDATE interest SET reading=@p_reading, trekking=@p_trekking, hiking=@p_hiking, singing=@p_singing, dancing=@p_dancing,listenMusic=@p_listenMusic, gardening=@p_gardening, cooking=@p_cooking, fitness=@p_fitness, foodie=@p_foodie,travelling=@p_travelling, art=@p_art, photography=@p_photography, teaching=@p_teaching, technology=@p_technology,coding=@p_coding, petCaring=@p_petCaring, outdoorGaming=@p_outdoorGaming, indoorGaming=@p_indoorGaming,fashion=@p_fashion, nightLife=@p_nightLife, daylife=@p_daylife, investment=@p_investment,business=@p_business,movies=@p_movies,shopping=@p_shopping,roadtrips=@p_roadtrips,politics=@p_politics,chillatbar=@p_chillatbar WHERE id=@p_id";
+                //MySqlCommand cmd = new MySqlCommand(query, con);
+                //con.Open();
+                //cmd.Parameters.AddRange(msp);
+                //cmd.ExecuteNonQuery();
+
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = con;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "Pro_UserInterests_Insert";
+                cmd.Parameters.AddRange(msp);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "alert('Technical issue to save your details.');", true);
+            }
+            finally
+            {
+                con.Close();
+            }
         }
     }
     public class Tokenclass
