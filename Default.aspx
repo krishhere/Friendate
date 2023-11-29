@@ -50,10 +50,11 @@
                             <asp:Label ID="lblId" runat="server" Text='<%# Eval("id") %>' Visible="false"></asp:Label>
                             <asp:Label ID="lblUserName" runat="server" Text='<%# Eval("Name") %>'></asp:Label>
                         </h6>
-                        <span class="nav-item small"> <asp:Label ID="lblCity" runat="server" Text='<%# Eval("city") %>'></asp:Label></span>
+                        <span class="nav-item small"> <asp:Label ID="lblCity" runat="server" Text='<%# Eval("gender") %>'></asp:Label></span>
                       </div>
                       <p class="mb-0 small">
-                          <asp:Label ID="lblLookFor" runat="server" Text='<%# "Looking for " + Eval("lookFor") %>' class="badge bg-danger bg-opacity-10 text-danger mb-2 fw-bold"></asp:Label>
+                          <%--<asp:Label ID="lblLookFor" runat="server" Text='<%# "Looking for " + Eval("lookFor") %>' class="badge bg-danger bg-opacity-10 text-danger mb-2 fw-bold"></asp:Label>--%>
+                          <asp:Label ID="lblGender" runat="server" Text='<%# Eval("city") %>'></asp:Label>
                       </p>
                     </div>
                   </div>
