@@ -30,6 +30,7 @@ namespace WebApplication
         static string name;
         static string email;
         List<string> lstInterst = new List<string>();
+        bool flag = true;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
@@ -123,6 +124,7 @@ namespace WebApplication
                     UserInsert(id);
                     Thread.Sleep(500);
                     UploadInterests(id);
+                    StoreValueInCookies("salngName", txtName.Text.Trim());
                     Response.Redirect("Default.aspx", false);
                 }
                 else
@@ -169,40 +171,35 @@ namespace WebApplication
                     return;
                 }
 
-                MySqlParameter[] msp = new MySqlParameter[7];
-                msp[0] = new MySqlParameter("p_city", MySqlDbType.VarChar);
-                msp[1] = new MySqlParameter("p_dob", MySqlDbType.VarChar);
-                msp[2] = new MySqlParameter("p_gender", MySqlDbType.Int16);
-                msp[3] = new MySqlParameter("p_lookFor", MySqlDbType.Int16);
-                msp[4] = new MySqlParameter("p_about", MySqlDbType.VarChar);
-                msp[5] = new MySqlParameter("p_image1", MySqlDbType.MediumBlob);
-                msp[6] = new MySqlParameter("p_id", MySqlDbType.Int64);
+                MySqlParameter[] msp = new MySqlParameter[8];
+                msp[0] = new MySqlParameter("p_name", MySqlDbType.VarChar);
+                msp[1] = new MySqlParameter("p_city", MySqlDbType.VarChar);
+                msp[2] = new MySqlParameter("p_dob", MySqlDbType.VarChar);
+                msp[3] = new MySqlParameter("p_gender", MySqlDbType.Int16);
+                msp[4] = new MySqlParameter("p_lookFor", MySqlDbType.Int16);
+                msp[5] = new MySqlParameter("p_about", MySqlDbType.VarChar);
+                msp[6] = new MySqlParameter("p_image1", MySqlDbType.MediumBlob);
+                msp[7] = new MySqlParameter("p_id", MySqlDbType.Int64);
 
-                msp[0].Value = txtCity.Text.Trim();
-                msp[1].Value = txtDob.Text.Trim();
-                if (ddlGen.SelectedValue == "female")
-                {
-                    msp[2].Value = 0;
-                }
-                else
-                {
-                    msp[2].Value = 1;
-                }
+                msp[0].Value = txtName.Text.Trim();
+                msp[1].Value = txtCity.Text.Trim();
+                msp[2].Value = txtDob.Text.Trim();
+                msp[3].Value = ddlGen.SelectedValue == "female" ? 0 : 1;
                 if (ddlLookingFor.SelectedValue == "Friend")
                 {
-                    msp[3].Value = 0;
+                    msp[4].Value = 0;
                 }
                 else if (ddlLookingFor.SelectedValue == "Date")
                 {
-                    msp[3].Value = 1;
+                    msp[4].Value = 1;
                 }
                 else
                 {
-                    msp[3].Value = 2;
+                    msp[4].Value = 2;
                 }
-                msp[4].Value = txtAbout.Text.Trim();
-                msp[5].Value = bytes;
-                msp[6].Value = id;
+                msp[5].Value = txtAbout.Text.Trim();
+                msp[6].Value = bytes;
+                msp[7].Value = id;
 
                 MySqlCommand cmd = new MySqlCommand();
                 cmd.Connection = con;
@@ -452,6 +449,35 @@ namespace WebApplication
             catch (Exception ex)
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "alert('Technical issue to save your details.');", true);
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+        protected void txtName_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                string query = "select COUNT(Name) from users where Name=@pName";
+                MySqlCommand cmd = new MySqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@pName", txtName.Text.Trim());
+                con.Open();
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                if (count > 0)
+                {
+                    lblNameMsg.Text = "Profile name is existed, try again";
+                    lblNameMsg.Style["color"] = "#e72525";
+                }
+                else
+                {
+                    lblNameMsg.Text= "Profile name is available";
+                    lblNameMsg.Style["color"] = "#03ba00";
+                }
+            }
+            catch(Exception ex)
+            {
+
             }
             finally
             {

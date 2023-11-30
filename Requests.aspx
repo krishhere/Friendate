@@ -39,11 +39,13 @@
                             <asp:Label ID="lblGender" runat="server" Text='<%# "<i class=\"bi bi-gender-ambiguous\"></i> " + Eval("gender") %>'></asp:Label> </p>
                         <h6 class="mt-2" style="border-bottom:1px solid gray;"> <a > <asp:Label ID="lblAbout" runat="server" Text='<%# Eval("about") %>'></asp:Label> </a> </h6>
                         <h6>Interests:</h6>
+                          <div>
                         <asp:Repeater ID="rptUserInterests" runat="server" OnItemDataBound="rptUserInterests_ItemDataBound">
                         <ItemTemplate>
-                            <asp:Label ID="lblInterest" runat="server" Text="" class="small text-secondary" style="border: 1px solid gray;padding:5px;border-radius:3px;"></asp:Label>
+                            <asp:Label ID="lblInterest" runat="server" Text="" class="small text-secondary" style="border: 1px solid gray;padding:5px;border-radius:3px;display: inline-block; margin:0px 0px 5px 0px; box-sizing: border-box;"></asp:Label>
                         </ItemTemplate>
                         </asp:Repeater>
+                              </div>
                           <asp:Panel ID="pnlAcceptReject" runat="server">
                         <div class="d-flex mt-3 justify-content-between">
                           <div class="w-50" style="padding-right:5px;">

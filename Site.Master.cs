@@ -36,11 +36,11 @@ namespace WebApplication
             int id = 0;
             try
             {
-                con.Open();
                 MySqlDataReader dr = null;
-                MySqlCommand cmd = con.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "SELECT id,name,email,image1 FROM mySite.users where email='" + emailId + "'";
+                string query = "SELECT id,name,email,image1 FROM mySite.users where email=@pEmail";
+                MySqlCommand cmd = new MySqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@pEmail", emailId);
+                con.Open();
                 dr = cmd.ExecuteReader();
                 if (dr.Read())
                 {
@@ -83,8 +83,7 @@ namespace WebApplication
 
         protected void lbProfile_Click(object sender, EventArgs e)
         {
-            Session["edit"] = "EditProfile";
-            Response.Redirect("UserEntry");
+            Response.Redirect("EditProfile");
         }
     }
 }

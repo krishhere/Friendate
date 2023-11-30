@@ -22,14 +22,22 @@ namespace WebApplication
         }
         protected void btnMailConfirm_Click(object sender, EventArgs e)
         {
-            date = DateTime.Now.ToString("MMyydd");
-            //Task task = new Task(sendMail);
-            //task.Start();
-            txtCode.Visible = true;
-            btnCodeConfirm.Visible = true;
-            txtEmail.Visible = false;
-            txtName.Visible = false;
-            btnMailConfirm.Visible = false;
+            int count = emailVerify();
+            if (count > 0)
+            {
+                lblEmailMsg.Text = "Email is already registered, please <a href='Login.aspx'>login</a>";
+                lblEmailMsg.Style["color"] = "#e72525";
+            }
+            else
+            {
+                date = DateTime.Now.ToString("MMyydd");
+                //Task task = new Task(sendMail);
+                //task.Start();
+                txtCode.Visible = true;
+                btnCodeConfirm.Visible = true;
+                txtEmail.Visible = false;
+                btnMailConfirm.Visible = false;
+            }
         }
         protected void btnCodeConfirm_Click(object sender, EventArgs e)
         {
@@ -73,7 +81,6 @@ namespace WebApplication
                 UserInsert();
                 int id = BindUserId(txtEmail.Text.Trim());
                 StoreValueInCookies("salngId", id.ToString());
-                StoreValueInCookies("salngName", txtName.Text.Trim());
                 StoreValueInCookies("salngEmail", txtEmail.Text.Trim());
                 Response.Redirect("UserEntry.aspx");
             }
@@ -82,14 +89,12 @@ namespace WebApplication
         {
             try
             {
-                MySqlParameter[] msp = new MySqlParameter[3];
-                msp[0] = new MySqlParameter("p_Name", MySqlDbType.VarChar);
-                msp[1] = new MySqlParameter("p_Email", MySqlDbType.VarChar);
-                msp[2] = new MySqlParameter("p_Password", MySqlDbType.VarChar);
+                MySqlParameter[] msp = new MySqlParameter[2];
+                msp[0] = new MySqlParameter("p_Email", MySqlDbType.VarChar);
+                msp[1] = new MySqlParameter("p_Password", MySqlDbType.VarChar);
 
-                msp[0].Value = txtName.Text.Trim();
-                msp[1].Value = txtEmail.Text.Trim();
-                msp[2].Value = txtPswd.Text.Trim();
+                msp[0].Value = txtEmail.Text.Trim();
+                msp[1].Value = txtPswd.Text.Trim();
 
                 MySqlCommand cmd2 = new MySqlCommand();
                 cmd2.Connection = con;
@@ -140,6 +145,51 @@ namespace WebApplication
             cookie.Value = value;
             cookie.Expires = DateTime.Now.AddYears(1);
             HttpContext.Current.Response.Cookies.Add(cookie);
+        }
+        protected void txtEmail_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int count = emailVerify();
+                if (count > 0)
+                {
+                    lblEmailMsg.Text = "Email already is registered, please <a href='Login.aspx'>login</a>";
+                    lblEmailMsg.Style["color"] = "#e72525";
+                }
+                else
+                {
+                    lblEmailMsg.Visible = false;
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+        private int emailVerify()
+        {
+            int count = 0;
+            try
+            {
+                string query = "select COUNT(email) from users where email=@pEmail";
+                MySqlCommand cmd = new MySqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@pEmail", txtEmail.Text.Trim());
+                con.Open();
+                count = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                con.Close();
+            }
+            return count;
         }
     }
 }

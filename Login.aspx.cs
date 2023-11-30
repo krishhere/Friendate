@@ -55,9 +55,10 @@ namespace WebApplication
             {
                 con.Open();
                 MySqlDataReader dr = null;
-                MySqlCommand cmd = con.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = $"SELECT id,Name,image1 FROM mySite.users where Email='{txtEmail.Text.Trim()}' and password='{txtPswd.Text.Trim()}'";
+                string query = "SELECT id,Name,image1 FROM mySite.users where Email=@pEmail and password=@pPassword";
+                MySqlCommand cmd = new MySqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@pEmail", txtEmail.Text.Trim());
+                cmd.Parameters.AddWithValue("@pPassword", txtPswd.Text.Trim());
                 dr = cmd.ExecuteReader();
                 if (dr.Read())
                 {

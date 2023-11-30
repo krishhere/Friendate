@@ -14,11 +14,11 @@
 	<link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap-icons/bootstrap-icons.css"/>
   <link rel="stylesheet" type="text/css" href="assets/vendor/choices.js/public/assets/styles/choices.min.css"/>
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css"/>
-    <script>
+    <%--<script>
         $(document).ready(function () {
             window.history.replaceState('', '', window.location.href)
         });
-    </script>
+    </script>--%>
     
     <%--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>--%>
 	<%--<script type="text/javascript">
@@ -65,7 +65,8 @@
             <div class="row g-3">
               <div class="col-sm-6 col-lg-3">
                 <label class="form-label">Profile Name</label>
-                  <asp:TextBox ID="txtName" runat="server" class="form-control" placeholder="Enter Profile Name"></asp:TextBox>
+                  <asp:TextBox ID="txtName" runat="server" class="form-control" placeholder="Enter Profile Name" OnTextChanged="txtName_TextChanged" AutoPostBack="true" MaxLength="12"></asp:TextBox>
+                  <asp:Label ID="lblNameMsg" runat="server" Text=""></asp:Label>
                   <%--<asp:TextBox ID="txtName" runat="server" class="form-control fakepassword" placeholder="Enter Profile Name" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Can't be changed further. Accepts maximum 10 characters." data-bs-original-title="" title="" MaxLength="10"></asp:TextBox>--%>
               </div>
               <div class="col-sm-6 col-lg-3">

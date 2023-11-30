@@ -27,8 +27,8 @@
           <div class="mt-4">
               <asp:Panel ID="pnlMail" runat="server">
                 <div class="mb-3 input-group-lg">
-                    <asp:TextBox ID="txtName" runat="server" CssClass="form-control" placeholder="Enter Name"></asp:TextBox><br />
-                    <asp:TextBox ID="txtEmail" runat="server" class="form-control" placeholder="Enter email"></asp:TextBox><br />
+                    <asp:TextBox ID="txtEmail" runat="server" class="form-control" placeholder="Enter email" AutoPostBack="true" OnTextChanged="txtEmail_TextChanged"></asp:TextBox>
+                    <asp:Label ID="lblEmailMsg" runat="server" Text="" ForeColor="Red"></asp:Label>
                   <%--<small>We'll never share your email with anyone else.</small>--%>
                   <div class="d-grid">
                       <asp:Button ID="btnMailConfirm" runat="server" Text="Confirm" class="btn btn-lg btn-primary" OnClick="btnMailConfirm_Click" />
@@ -61,7 +61,7 @@
                 </div>
             </asp:Panel>
               <asp:Label ID="lblError" runat="server" Text="" ForeColor="Red"></asp:Label>
-            <p class="mb-0 mt-3">©<%: DateTime.Now.Year %> <a target="_blank" href="#">MyView</a> All rights reserved</p>
+            <p class="mb-0 mt-3">©<%: DateTime.Now.Year %> <a target="_blank" href="#">frinDate</a> All rights reserved</p>
           </div>
         </div>
       </div>
