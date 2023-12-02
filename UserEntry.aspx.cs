@@ -154,7 +154,7 @@ namespace WebApplication
                 using (MagickImage image = new MagickImage(imageBytes))
                 {
                     image.Format = image.Format;
-                    image.Resize(x, y);
+                    //image.Resize(x, y);
                     image.Quality = 100;
                     var memStream = new MemoryStream();
                     image.Write(memStream);   //image.Write(@"C:\Users\krish\OneDrive\Desktop\lowSize\YourFinalImage.jpg");
@@ -163,7 +163,7 @@ namespace WebApplication
 
                 decimal size = Convert.ToInt32(bytes.Length);
                 size = Convert.ToDecimal(Math.Round(size / 1024) / 1024);
-                if (size > 1)
+                if (size > 3)
                 {
                     string Error = "Image size is bigger";
                     lblMsg.Visible = true;
@@ -431,12 +431,6 @@ namespace WebApplication
                 msp[27].Value = lstInterst.Contains("politics") ? 1 : 0;
                 msp[28].Value = lstInterst.Contains("chillatbar") ? 1 : 0;
                 msp[29].Value = id;
-
-                //string query = "UPDATE interest SET reading=@p_reading, trekking=@p_trekking, hiking=@p_hiking, singing=@p_singing, dancing=@p_dancing,listenMusic=@p_listenMusic, gardening=@p_gardening, cooking=@p_cooking, fitness=@p_fitness, foodie=@p_foodie,travelling=@p_travelling, art=@p_art, photography=@p_photography, teaching=@p_teaching, technology=@p_technology,coding=@p_coding, petCaring=@p_petCaring, outdoorGaming=@p_outdoorGaming, indoorGaming=@p_indoorGaming,fashion=@p_fashion, nightLife=@p_nightLife, daylife=@p_daylife, investment=@p_investment,business=@p_business,movies=@p_movies,shopping=@p_shopping,roadtrips=@p_roadtrips,politics=@p_politics,chillatbar=@p_chillatbar WHERE id=@p_id";
-                //MySqlCommand cmd = new MySqlCommand(query, con);
-                //con.Open();
-                //cmd.Parameters.AddRange(msp);
-                //cmd.ExecuteNonQuery();
 
                 MySqlCommand cmd = new MySqlCommand();
                 cmd.Connection = con;

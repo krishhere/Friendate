@@ -140,7 +140,7 @@
               </div>
               <div class="col-md-6 col-lg-6">
                   <button type="button" id="btnCrop" class="btn btn-primary mb-0 end-100">Crop Image</button><br /><br />
-                  <asp:Button ID="BtnSubmit" runat="server" class="btn btn-primary mb-0" Text="Go ahead" Enabled="false" OnClick="BtnSubmit_Click" OnClientClick="showLoadingMessage();" style="position: absolute;bottom: 0px;right:0px;"/>
+                  <asp:Button ID="BtnSubmit" runat="server" class="btn btn-primary mb-0" Text="Go ahead" Enabled="true" OnClick="BtnSubmit_Click" OnClientClick="showLoadingMessage();" style="position: absolute;bottom: 0px;right:0px;"/>
               </div>
               <div class="col-md-12 col-lg-12">
                   <asp:Label ID="lblMsg" runat="server" Text="" Visible="false" ForeColor="Red" Font-Bold="true"></asp:Label>
@@ -178,7 +178,7 @@
                 $image.cropper("destroy");
                 $image.attr("src", croppedImage);
                 $("#hdnCroppedImageData").val(croppedImage);
-                document.getElementById('<%= BtnSubmit.ClientID %>').disabled = false;
+                <%--document.getElementById('<%= BtnSubmit.ClientID %>').disabled = false;--%>
             });
         });
     </script>

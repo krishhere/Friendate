@@ -165,7 +165,8 @@
 		<li class="px-3">
 			<div class="d-flex align-items-center position-relative">
 			</div>
-			<asp:LinkButton ID="lbProfile" runat="server" class="dropdown-item btn btn-primary-soft btn-sm my-2 text-center" OnClick="lbProfile_Click"><asp:Label ID="lblProfileName" runat="server" Text="" Font-Bold="true" Font-Size="16px"></asp:Label></asp:LinkButton>
+			<asp:LinkButton ID="lbProfile" runat="server" class="dropdown-item btn btn-primary-soft btn-sm my-2 text-center" OnClick="lbProfile_Click">
+				<asp:Label ID="lblProfileName" runat="server" Text="" Font-Bold="true" Font-Size="16px"></asp:Label></asp:LinkButton>
 		</li>
 		<li><a class="dropdown-item" href="settings.html"><i class="bi bi-gear fa-fw me-2"></i>Settings & Privacy</a></li>
 		<li> 

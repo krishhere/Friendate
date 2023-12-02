@@ -83,7 +83,7 @@ namespace WebApplication
 
         protected void lbProfile_Click(object sender, EventArgs e)
         {
-            Response.Redirect("EditProfile");
+            Response.Redirect("EditProfile.aspx");
         }
     }
 }

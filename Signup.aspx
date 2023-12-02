@@ -38,7 +38,10 @@
                   </div>
                     <div class="d-grid">
                     <asp:Button ID="btnCodeConfirm" runat="server" Text="Confirm" class="btn btn-lg btn-primary" Visible="false" OnClick="btnCodeConfirm_Click"/>
-                  </div>
+                  </div><br />
+                <div class="d-grid">
+                    <span class="d-block" style="text-align:center;">Already have an account? <a href="Login.aspx">Sign in here</a></span>
+                </div>
                 </div>
               </asp:Panel>
               <asp:Panel ID="pnlPswd" runat="server" Visible="false">
@@ -61,14 +64,16 @@
                 </div>
             </asp:Panel>
               <asp:Label ID="lblError" runat="server" Text="" ForeColor="Red"></asp:Label>
-            <p class="mb-0 mt-3">©<%: DateTime.Now.Year %> <a target="_blank" href="#">frinDate</a> All rights reserved</p>
+                <div class="d-grid">
+                    <p style="text-align:center;" class="d-block mb-0 mt-3">©<%: DateTime.Now.Year %> <a target="_blank" href="#">frnDate</a> All rights reserved</p>
+                </div>
+            
           </div>
         </div>
       </div>
     </div>
   </div>
 </main>
-
 <script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/vendor/pswmeter/pswmeter.min.js"></script>
 <script src="assets/js/functions.js"></script>

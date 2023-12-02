@@ -3,15 +3,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Social - Network, Community and Event Theme</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="author" content="">
-	<meta name="description" content="">
-	<link rel="shortcut icon" href="assets/images/favicon.ico">
-	<link rel="preconnect" href="https://fonts.googleapis.com/">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap">
-	<link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css">
-	<link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap-icons/bootstrap-icons.css">
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+	<meta name="author" content=""/>
+	<meta name="description" content=""/>
+	<link rel="shortcut icon" href="assets/images/favicon.ico"/>
+	<link rel="preconnect" href="https://fonts.googleapis.com/"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"/>
+	<link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css"/>
+	<link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap-icons/bootstrap-icons.css"/>
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css" />
     <script type="text/javascript" >
    function preventBack(){window.history.forward();}
@@ -39,8 +39,8 @@
                 </span>
               </div>
             </div>
-            <div class="mb-3 d-sm-flex justify-content-between">
-              <a href="forgot-password.html">Forgot password?</a>
+            <div class="mb-3 justify-content-between">
+              <span class="d-block" style="text-align:right;"><a href="forgot-password.html">Forgot password?</a></span>
             </div>
             <div class="d-grid p-2">
                 <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" class="btn btn-lg btn-primary" />

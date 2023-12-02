@@ -113,10 +113,10 @@
 
                   <div class="nav nav-pills nav-pills-light nav-fill nav-stack small border-top my-top">
                     <asp:LinkButton ID="lnkFriend" runat="server" OnClick="lnkFriend_Click" Font-Bold="true" class="nav-link mb-0">
-                            <asp:Image ID="Image1" runat="server" ImageUrl="~/assets/images/friend.png" Width="15px" /> Friend
-                    </asp:LinkButton> 
+                        <asp:Image ID="Image1" runat="server" ImageUrl="~/assets/images/friend.png" Width="15px" /> Friend
+                    </asp:LinkButton>
                     <asp:LinkButton ID="lnkDate" runat="server" Text="<i class='bi bi-heart pe-1'></i> Date" OnClick="lnkDate_Click" class="nav-link mb-0" style="float:left;" Font-Bold="true" />
-                    <li class="nav-item dropdown">
+                    <%--<li class="nav-item dropdown">
                         <a href="#" class="nav-link mb-0" id="cardShareAction" data-bs-toggle="dropdown" aria-expanded="false">
                             <b><i class="bi bi-reply-fill flip-horizontal ps-1"></i>Share</b>
                         </a>
@@ -124,7 +124,7 @@
                             <li><a class="dropdown-item" href="#"><i class="bi bi-envelope fa-fw pe-2"></i>Facebook</a></li>
                             <li><a class="dropdown-item" href="#"><i class="bi bi-bookmark-check fa-fw pe-2"></i>whatsapp</a></li>
                         </ul>
-                    </li>
+                    </li>--%>
                   </div>
               </div>
             </div>

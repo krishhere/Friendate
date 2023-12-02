@@ -25,7 +25,7 @@ namespace WebApplication
             int count = emailVerify();
             if (count > 0)
             {
-                lblEmailMsg.Text = "Email is already registered, please <a href='Login.aspx'>login</a>";
+                lblEmailMsg.Text = "Email is registered, please <a href='Login.aspx'>login</a>";
                 lblEmailMsg.Style["color"] = "#e72525";
             }
             else
@@ -153,7 +153,7 @@ namespace WebApplication
                 int count = emailVerify();
                 if (count > 0)
                 {
-                    lblEmailMsg.Text = "Email already is registered, please <a href='Login.aspx'>login</a>";
+                    lblEmailMsg.Text = "Email is registered, please <a href='Login.aspx'>login</a>";
                     lblEmailMsg.Style["color"] = "#e72525";
                 }
                 else
